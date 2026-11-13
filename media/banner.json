@@ -1,0 +1,7 @@
+{
+  "accent": "#1d9bf0",
+  "tagline": "Docker, Kubernetes, pm2 and tmux on your server, in one window.",
+  "chips": ["Docker", "Compose", "Kubernetes", "pm2"],
+  "window": "Containers",
+  "illustration": "illustration.svg"
+}

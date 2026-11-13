@@ -1,0 +1,124 @@
+<g font-family="Inter, -apple-system, 'Segoe UI', sans-serif" font-size="12.5">
+  <defs>
+    <g id="ct-play" fill="none" stroke="#9aa3b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></g>
+    <g id="ct-stop" fill="none" stroke="#9aa3b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/></g>
+    <g id="ct-restart" fill="none" stroke="#9aa3b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></g>
+    <g id="ct-shell" fill="none" stroke="#9aa3b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 11 2-2-2-2"/><path d="M11 13h4"/><rect width="18" height="18" x="3" y="3" rx="2"/></g>
+    <g id="ct-trash" fill="none" stroke="#9aa3b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></g>
+    <g id="ct-tree" fill="none" stroke="#9aa3b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12h-8"/><path d="M21 6H8"/><path d="M21 18h-8"/><path d="M3 6v4c0 1.1.9 2 2 2h3"/><path d="M3 10v6c0 1.1.9 2 2 2h3"/></g>
+    <g id="ct-acts"><use href="#ct-restart" transform="translate(20 0) scale(0.56)"/><use href="#ct-shell" transform="translate(40 0) scale(0.56)"/><use href="#ct-trash" transform="translate(60 0) scale(0.56)"/></g>
+  </defs>
+
+  <!-- Sidebar -->
+  <rect x="0" y="0" width="156" height="404" fill="#0f131c"/>
+  <line x1="156" y1="0" x2="156" y2="404" stroke="#232a38"/>
+  <rect x="10" y="12" width="136" height="28" rx="7" fill="#0c0f15" stroke="#262d3c"/>
+  <circle cx="22" cy="26" r="3.5" fill="#3fb950"/>
+  <text x="32" y="30.5" fill="#f4f6fb" font-weight="600">Docker <tspan fill="#9aa3b6" font-weight="400">· colima</tspan></text>
+  <path d="M128 24l4 4 4-4" fill="none" stroke="#9aa3b6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="10" y="52" width="136" height="28" rx="7" fill="#1d9bf0" fill-opacity="0.22" stroke="none"/>
+    <g transform="translate(20 59) scale(0.58)" stroke="#f4f6fb"><path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z"/><path d="M10 21.9V14L2.1 9.1"/><path d="m10 14 11.9-6.9"/></g>
+    <g transform="translate(20 91) scale(0.58)" stroke="#9aa3b6"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></g>
+    <g transform="translate(20 123) scale(0.58)" stroke="#9aa3b6"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></g>
+    <g transform="translate(20 155) scale(0.58)" stroke="#9aa3b6"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></g>
+    <g transform="translate(20 187) scale(0.58)" stroke="#9aa3b6"><path d="M22 12H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M6 16h.01"/><path d="M10 16h.01"/></g>
+  </g>
+  <text x="42" y="70.5" fill="#f4f6fb" font-weight="500">Containers</text><text x="136" y="70.5" fill="#9aa3b6" text-anchor="end">7</text>
+  <text x="42" y="102.5" fill="#9aa3b6">Images</text><text x="136" y="102.5" fill="#5d6678" text-anchor="end">14</text>
+  <text x="42" y="134.5" fill="#9aa3b6">Volumes</text><text x="136" y="134.5" fill="#5d6678" text-anchor="end">6</text>
+  <text x="42" y="166.5" fill="#9aa3b6">Networks</text><text x="136" y="166.5" fill="#5d6678" text-anchor="end">5</text>
+  <text x="42" y="198.5" fill="#9aa3b6">Disk usage</text>
+  <g transform="translate(14 378) scale(0.5)" fill="none" stroke="#5d6678" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></g>
+  <text x="32" y="389" fill="#5d6678" font-size="11">Docker 28.5.1</text>
+
+  <!-- Toolbar -->
+  <line x1="156" y1="46" x2="540" y2="46" stroke="#232a38"/>
+  <text x="170" y="29" fill="#f4f6fb" font-size="14" font-weight="700">Containers</text>
+  <rect x="258" y="12" width="150" height="26" rx="6" fill="#0c0f15" stroke="#262d3c"/>
+  <g transform="translate(266 19) scale(0.5)" fill="none" stroke="#5d6678" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g>
+  <text x="284" y="29.5" fill="#5d6678">Search</text>
+  <text x="526" y="29.5" fill="#9aa3b6" text-anchor="end">6 of 7 running</text>
+
+  <!-- Table head -->
+  <line x1="156" y1="72" x2="540" y2="72" stroke="#232a38"/>
+  <g fill="#9aa3b6" font-weight="500"><text x="170" y="64">Name</text><text x="314" y="64">Status</text><text x="408" y="64">Ports</text></g>
+
+  <!-- Compose project: shop -->
+  <g transform="translate(0 72)">
+    <path d="M168 13l4 4 4-4" fill="none" stroke="#9aa3b6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#ct-tree" transform="translate(182 10) scale(0.5)"/>
+    <text x="200" y="21.5" fill="#f4f6fb" font-weight="600">shop <tspan fill="#9aa3b6" font-weight="400">3/4 running</tspan></text>
+    <use href="#ct-play" transform="translate(452 10) scale(0.56)"/>
+    <g transform="translate(452 10)"><use href="#ct-stop" transform="translate(20 0) scale(0.56)"/><use href="#ct-restart" transform="translate(40 0) scale(0.56)"/><use href="#ct-trash" transform="translate(60 0) scale(0.56)"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+  <g transform="translate(0 106)">
+    <rect x="157" y="0" width="383" height="34" fill="#ffffff" fill-opacity="0.04"/>
+    <circle cx="198" cy="17" r="4" fill="#3fb950"/>
+    <text x="210" y="21.5" fill="#f4f6fb" font-weight="500">shop-web-1</text>
+    <text x="314" y="21.5" fill="#9aa3b6">Up 2 hours</text>
+    <text x="408" y="21.5" fill="#1d9bf0">3000</text>
+    <g transform="translate(452 10)"><use href="#ct-stop" transform="scale(0.56)"/><use href="#ct-acts"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+  <g transform="translate(0 140)">
+    <circle cx="198" cy="17" r="4" fill="#3fb950"/>
+    <text x="210" y="21.5" fill="#f4f6fb" font-weight="500">shop-api-1</text>
+    <text x="314" y="21.5" fill="#9aa3b6">Up 2 hours</text>
+    <text x="408" y="21.5" fill="#1d9bf0">8080</text>
+    <g transform="translate(452 10)"><use href="#ct-stop" transform="scale(0.56)"/><use href="#ct-acts"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+  <g transform="translate(0 174)">
+    <circle cx="198" cy="17" r="4" fill="#3fb950"/>
+    <text x="210" y="21.5" fill="#f4f6fb" font-weight="500">shop-db-1</text>
+    <text x="314" y="21.5" fill="#9aa3b6">Up 2 hours</text>
+    <text x="408" y="21.5" fill="#1d9bf0">5432</text>
+    <g transform="translate(452 10)"><use href="#ct-stop" transform="scale(0.56)"/><use href="#ct-acts"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+  <g transform="translate(0 208)">
+    <circle cx="198" cy="17" r="4" fill="#9aa3b6" fill-opacity="0.5"/>
+    <text x="210" y="21.5" fill="#f4f6fb" font-weight="500">shop-worker-1</text>
+    <text x="314" y="21.5" fill="#9aa3b6">Exited (1) 4 m…</text>
+    <g transform="translate(452 10)"><use href="#ct-play" transform="scale(0.56)"/><use href="#ct-acts" opacity="0.6"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+
+  <!-- Compose project: blog -->
+  <g transform="translate(0 242)">
+    <path d="M168 13l4 4 4-4" fill="none" stroke="#9aa3b6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#ct-tree" transform="translate(182 10) scale(0.5)"/>
+    <text x="200" y="21.5" fill="#f4f6fb" font-weight="600">blog <tspan fill="#9aa3b6" font-weight="400">2/2 running</tspan></text>
+    <g transform="translate(452 10)"><use href="#ct-play" transform="scale(0.56)"/><use href="#ct-stop" transform="translate(20 0) scale(0.56)"/><use href="#ct-restart" transform="translate(40 0) scale(0.56)"/><use href="#ct-trash" transform="translate(60 0) scale(0.56)"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+  <g transform="translate(0 276)">
+    <circle cx="198" cy="17" r="4" fill="#3fb950"/>
+    <text x="210" y="21.5" fill="#f4f6fb" font-weight="500">blog-ghost-1</text>
+    <text x="314" y="21.5" fill="#9aa3b6">Up 3 days</text>
+    <text x="408" y="21.5" fill="#1d9bf0">2368</text>
+    <g transform="translate(452 10)"><use href="#ct-stop" transform="scale(0.56)"/><use href="#ct-acts"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+  <g transform="translate(0 310)">
+    <circle cx="198" cy="17" r="4" fill="#3fb950"/>
+    <text x="210" y="21.5" fill="#f4f6fb" font-weight="500">blog-mysql-1</text>
+    <text x="314" y="21.5" fill="#9aa3b6">Up 3 days</text>
+    <text x="408" y="21.5" fill="#1d9bf0">3306</text>
+    <g transform="translate(452 10)"><use href="#ct-stop" transform="scale(0.56)"/><use href="#ct-acts"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+
+  <!-- On its own -->
+  <g transform="translate(0 344)">
+    <circle cx="176" cy="17" r="4" fill="#3fb950"/>
+    <text x="188" y="21.5" fill="#f4f6fb" font-weight="500">registry</text>
+    <text x="314" y="21.5" fill="#9aa3b6">Up 5 days</text>
+    <text x="408" y="21.5" fill="#1d9bf0">5000</text>
+    <g transform="translate(452 10)"><use href="#ct-stop" transform="scale(0.56)"/><use href="#ct-acts"/></g>
+    <line x1="156" y1="34" x2="540" y2="34" stroke="#232a38"/>
+  </g>
+</g>

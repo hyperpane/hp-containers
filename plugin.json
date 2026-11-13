@@ -4,9 +4,11 @@
   "name": "Containers",
   "version": "0.0.1",
   "publisher": "hyperpane",
-  "description": "Docker, Podman, nerdctl, Kubernetes, pm2, tmux and screen on the server, laid out as Docker Desktop is: containers, images, volumes, networks, logs, files, stats, pods.",
+  "description": "Docker, Podman, nerdctl, Kubernetes, pm2, tmux and screen on your server, laid out as Docker Desktop is: containers by Compose project, images, volumes, networks, logs, files, stats.",
   "icon": "icon.svg",
   "category": "DevOps",
+  "homepage": "https://github.com/hyperpane/hp-containers",
+  "license": "MIT",
   "engines": { "hyperpane": ">=0.2.0", "node": ">=22.15.0" },
   "permissions": ["terminal"],
   "client": { "main": "main.tsx" },
@@ -23,7 +25,7 @@
   },
   "signature": {
     "key": "ed25519:5LgmP9NjLnpvz48igrFekSqi+4k6gzaO8sNwlsgNKFc=",
-    "sig": "kujaP6ve1/4QJDq7n6AA0qVh0Oo1cgmv3tGXe2oZKL541uUdYYXkNZIA7Km4EXhVA7I7A7+WPBIcfw4Q9GeHBg==",
-    "server": "Arpz5AkGZTO9OgRUhsznzNMe8NRG/1tSgm246VlCaWJuKBMqZtGDct4PYQboCJYcvnX49o626Q2d3ehENh8ICQ=="
+    "sig": "aCcc+pXq1YUcsU+gJAJGrHWP4S6Hj8zz/ay+RjTxK6/j9Y5vF4EAY5eqs6ztZ5hjXyqYoYzKnAGLby6x3eF8BA==",
+    "server": "WF748fTrZC7nhDyRZnVI+G/o8fFjBcwse+xJOYz89PE+vEHIh2plJhzJ2GjwpfE4Kqm7XBAKfYwnD7yzyR4uBA=="
   }
 }
