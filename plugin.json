@@ -1,0 +1,29 @@
+{
+  "manifest": 1,
+  "id": "containers",
+  "name": "Containers",
+  "version": "0.0.1",
+  "publisher": "hyperpane",
+  "description": "Docker, Podman, nerdctl, Kubernetes, pm2, tmux and screen on the server, laid out as Docker Desktop is: containers, images, volumes, networks, logs, files, stats, pods.",
+  "icon": "icon.svg",
+  "category": "DevOps",
+  "engines": { "hyperpane": ">=0.2.0", "node": ">=22.15.0" },
+  "permissions": ["terminal"],
+  "client": { "main": "main.tsx" },
+  "server": { "runtime": "node", "main": "main.ts" },
+  "contributes": {
+    "nodes": [
+      {
+        "kind": "containers",
+        "title": "Containers",
+        "icon": "icon.svg",
+        "size": [920, 580]
+      }
+    ]
+  },
+  "signature": {
+    "key": "ed25519:5LgmP9NjLnpvz48igrFekSqi+4k6gzaO8sNwlsgNKFc=",
+    "sig": "kujaP6ve1/4QJDq7n6AA0qVh0Oo1cgmv3tGXe2oZKL541uUdYYXkNZIA7Km4EXhVA7I7A7+WPBIcfw4Q9GeHBg==",
+    "server": "Arpz5AkGZTO9OgRUhsznzNMe8NRG/1tSgm246VlCaWJuKBMqZtGDct4PYQboCJYcvnX49o626Q2d3ehENh8ICQ=="
+  }
+}
