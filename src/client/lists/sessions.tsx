@@ -14,7 +14,7 @@ export function sessionsList(props: ListProps) {
   return (
     <>
       <Toolbar title={`${target.kind} sessions`} filter={filter} setFilter={setFilter} />
-      <Table cols={[{ title: 'Name', w: '36%' }, { title: 'Attached' }, wide && { title: 'Windows' }, wide && { title: 'Created' }, { title: '', actions: 2 }]} empty={!list.length}>
+      <Table id="sessions" cols={[{ title: 'Name', w: '36%' }, { title: 'Attached' }, wide && { title: 'Windows' }, wide && { title: 'Created' }, { title: '', actions: 2 }]} empty={!list.length}>
         {list.map((s) => (
           <Tr key={s.id} onClick={() => onOpen({ thing: 'session', id: s.id, name: s.name })}>
             <td className={td}>

@@ -15,6 +15,7 @@ export function processesList(props: ListProps) {
     <>
       <Toolbar title="Processes" filter={filter} setFilter={setFilter} />
       <Table
+        id="processes"
         cols={[{ title: 'Name', w: '28%' }, { title: 'Status' }, { title: 'CPU', w: '8%' }, { title: 'Memory', w: '11%' }, wide && { title: 'Restarts', w: '9%' }, wide && { title: 'Uptime' }, wide && { title: 'Mode' }, { title: '', actions: 3 }]}
         empty={!list.length}
       >

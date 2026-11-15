@@ -26,7 +26,7 @@ export function networksList(props: ListProps) {
           Clean up
         </Btn>
       </Toolbar>
-      <Table cols={[{ title: 'Name', w: '40%' }, { title: 'Driver' }, wide && { title: 'Scope' }, wide && { title: 'Id', w: '18%' }, { title: '', actions: 1 }]} empty={!list.length}>
+      <Table id="networks" cols={[{ title: 'Name', w: '40%' }, { title: 'Driver' }, wide && { title: 'Scope' }, wide && { title: 'Id', w: '18%' }, { title: '', actions: 1 }]} empty={!list.length}>
         {list.map((n) => (
           <Tr key={n.id || n.name} onClick={() => onOpen({ thing: 'network', id: n.name, name: n.name })}>
             <td className={cn(td, 'font-medium')}>

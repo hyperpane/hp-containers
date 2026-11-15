@@ -10,15 +10,14 @@
 import { useEffect, useState } from 'react';
 import { RefreshCw, Server } from 'lucide-react';
 import { useHost } from '@hyperpane/sdk/client';
-import { NodeMessage, ToolButton, cn } from '@hyperpane/ui';
+import { NodeMessage, Picker, ResizeHandle, ToolButton, cn, useResizable } from '@hyperpane/ui';
 import type { Snapshot, Target } from '../../shared/index.ts';
 import { Detail } from '../details/Detail.tsx';
 import { ID } from '../lib/calls.ts';
-import { useKept, useWidth } from '../lib/hooks.ts';
+import { useWidth } from '../lib/hooks.ts';
 import type { Open } from '../lib/open.ts';
 import { List } from '../lists/List.tsx';
 import { Loading } from '../ui/controls.tsx';
-import { Picker } from '../ui/Picker.tsx';
 import { SECTIONS, type Section, count, sectionsFor } from './sections.ts';
 
 export function ContainersView() {
@@ -31,7 +30,8 @@ export function ContainersView() {
   const [open, setOpen] = useState<Open | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
-  const [side, setSide] = useKept('containers.sidebar', 184);
+  // The sidebar's width: 132 to 360 px.
+  const side = useResizable({ id: 'containers.sidebar', initial: 184, min: 132, max: 360, axis: 'x' });
   const [mainRef, mainWidth] = useWidth<HTMLElement>();
 
   const load = () => {
@@ -66,33 +66,19 @@ export function ContainersView() {
 
   const sections = sectionsFor(target?.kind, snap);
   const narrow = mainWidth > 0 && mainWidth < 620;
-  // Dragging the sidebar's edge: 132 to 360 px.
-  const drag = (e: React.PointerEvent<HTMLDivElement>) => {
-    const from = e.clientX;
-    const start = side;
-    const el = e.currentTarget;
-    el.setPointerCapture(e.pointerId);
-    const move = (ev: PointerEvent) => setSide(Math.max(132, Math.min(360, Math.round(start + ev.clientX - from))));
-    const up = () => {
-      el.removeEventListener('pointermove', move);
-      el.removeEventListener('pointerup', up);
-    };
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerup', up);
-  };
   return (
-    <div className="flex h-full min-w-0 text-xs text-[var(--node-fg)]">
-      <aside className="relative flex flex-none flex-col gap-2 border-r border-[var(--node-border)] p-2" style={{ width: side }}>
+    <div className={cn('flex h-full min-w-0 text-xs text-[var(--node-fg)]', side.dragging && 'select-none')}>
+      <aside className="flex flex-none flex-col gap-2 p-2" style={{ width: side.size }}>
         <Picker
           label="Manager"
-          className="font-medium"
+          size="sm"
+          className="w-full font-medium"
           value={target?.id ?? ''}
           options={[
-            ...targets.filter((t) => t.installed !== false).map((t) => ({ id: t.id, label: `${t.ok ? '●' : '○'}  ${t.name}` })),
-            ...(targets.some((t) => t.installed === false) ? [{ id: '-', label: '', separator: true }] : []),
-            ...targets.filter((t) => t.installed === false).map((t) => ({ id: t.id, label: `${t.name}: not installed` })),
+            ...targets.filter((t) => t.installed !== false).map((t) => ({ value: t.id, label: `${t.ok ? '●' : '○'}  ${t.name}` })),
+            ...targets.filter((t) => t.installed === false).map((t, i) => ({ value: t.id, label: `${t.name}: not installed`, separator: i === 0 })),
           ]}
-          onChange={(id) => {
+          onValueChange={(id) => {
             setTargetId(id);
             setNamespace(null);
           }}
@@ -100,9 +86,11 @@ export function ContainersView() {
         {kube && snap && !snap.error && (
           <Picker
             label="Namespace"
+            size="sm"
+            className="w-full"
             value={ns!}
-            options={[{ id: '*', label: 'All namespaces' }, ...[...new Set([...(snap.namespaces ?? []), ns!])].filter((n) => n !== '*').map((n) => ({ id: n, label: n }))]}
-            onChange={(n) => {
+            options={[{ value: '*', label: 'All namespaces' }, ...[...new Set([...(snap.namespaces ?? []), ns!])].filter((n) => n !== '*').map((n) => ({ value: n, label: n }))]}
+            onValueChange={(n) => {
               setNamespace(n);
               setOpen(null);
             }}
@@ -139,16 +127,8 @@ export function ContainersView() {
           </span>
           <ToolButton label="Look for managers again" icon={RefreshCw} onClick={load} />
         </div>
-        <div
-          role="separator"
-          aria-orientation="vertical"
-          aria-label="Sidebar width (drag)"
-          title="Drag to resize; double-click for the usual width"
-          className="absolute top-0 -right-1 z-10 h-full w-2 cursor-col-resize hover:bg-[color-mix(in_srgb,var(--node-accent)_35%,transparent)]"
-          onPointerDown={drag}
-          onDoubleClick={() => setSide(184)}
-        />
       </aside>
+      <ResizeHandle axis="x" dragging={side.dragging} aria-label="Sidebar width" {...side.handleProps} />
       <main ref={mainRef} className="flex min-w-0 flex-1 flex-col">
         {target && !target.ok ? (
           <div className="p-4 text-[var(--ansi-3)]">{target.error}</div>

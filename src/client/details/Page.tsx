@@ -3,14 +3,15 @@
 
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { Btn, Tabs } from '../ui/controls.tsx';
+import { Tabs } from '@hyperpane/ui';
+import { Btn } from '../ui/controls.tsx';
 
 export function Page({ tabs, first, header, children }: { tabs: { id: string; name: string }[]; first?: string; header: React.ReactNode; children(tab: string): React.ReactNode }) {
   const [tab, setTab] = useState(first && tabs.some((x) => x.id === first) ? first : tabs[0].id);
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       {header}
-      {tabs.length > 1 && <Tabs tabs={tabs} value={tab} onChange={setTab} />}
+      {tabs.length > 1 && <Tabs className="px-2" label="The page" items={tabs.map((t) => ({ value: t.id, label: t.name }))} value={tab} onValueChange={setTab} />}
       <div className="flex min-h-0 flex-1 flex-col">{children(tab)}</div>
     </div>
   );

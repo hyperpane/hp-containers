@@ -5,11 +5,10 @@
 import { useState } from 'react';
 import { Play, Plus, Trash2, X } from 'lucide-react';
 import { useHost } from '@hyperpane/sdk/client';
-import { NodeInput, ToolButton } from '@hyperpane/ui';
+import { ColumnResizer, NodeInput, Picker, ToolButton, cn, styles, useColumnWidths } from '@hyperpane/ui';
 import type { Layer, RunSpec } from '../../shared/index.ts';
 import { useCall, useLoad } from '../lib/calls.ts';
 import { Btn, Loading } from '../ui/controls.tsx';
-import { Picker } from '../ui/Picker.tsx';
 import { InspectView } from '../views/InspectView.tsx';
 import { Page } from './Page.tsx';
 import type { DetailProps } from './types.ts';
@@ -54,17 +53,32 @@ export function ImagePage(props: DetailProps) {
 
 function LayersView({ target, image }: { target: string; image: string }) {
   const { value, error } = useLoad<Layer[]>({ op: 'history', target, id: image });
+  // What made a layer takes what's left; Size and Created are as wide as
+  // they were dragged (from their left edge, kept on this machine).
+  const cols = useColumnWidths('containers.layers', { size: 88, created: 128 }, { min: 48, max: 400 });
   if (!value) return <Loading error={error} />;
+  const th = 'relative truncate border-b border-[var(--node-border)] px-2 py-1.5 text-left font-medium text-[var(--node-muted)] first:pl-3';
   return (
     <div className="min-h-0 flex-1 overflow-auto">
-      <table className="w-full border-collapse">
-        <thead className="sticky top-0 bg-[var(--node-bg)]">
+      <table className="w-full table-fixed border-collapse">
+        <colgroup>
+          <col style={{ width: 40 }} />
+          <col />
+          <col style={{ width: cols.widths.size }} />
+          <col style={{ width: cols.widths.created }} />
+        </colgroup>
+        <thead className={cn(styles.stickyTableHead, 'bg-[var(--node-bg)]')}>
           <tr>
-            {['', 'Made by', 'Size', 'Created'].map((h) => (
-              <th key={h} className="border-b border-[var(--node-border)] px-2 py-1.5 text-left font-medium text-[var(--node-muted)] first:pl-3">
-                {h}
-              </th>
-            ))}
+            <th className={th} />
+            <th className={th}>Made by</th>
+            <th className={th}>
+              Size
+              <ColumnResizer {...cols.resizer('size', 'start')} />
+            </th>
+            <th className={th}>
+              Created
+              <ColumnResizer {...cols.resizer('created', 'start')} />
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -72,8 +86,8 @@ function LayersView({ target, image }: { target: string; image: string }) {
             <tr key={`${l.id}:${i}`} className="border-b border-[var(--node-border)] align-top">
               <td className="py-1.5 pl-3 text-[var(--node-muted)]">{value.length - i}</td>
               <td className="px-2 py-1.5 font-mono text-[11px] break-all whitespace-pre-wrap select-text">{l.createdBy || l.comment}</td>
-              <td className="px-2 py-1.5 whitespace-nowrap text-[var(--node-muted)]">{l.size}</td>
-              <td className="px-2 py-1.5 whitespace-nowrap text-[var(--node-muted)]">{l.created}</td>
+              <td className="truncate px-2 py-1.5 text-[var(--node-muted)]" title={l.size}>{l.size}</td>
+              <td className="truncate px-2 py-1.5 text-[var(--node-muted)]" title={l.created}>{l.created}</td>
             </tr>
           ))}
         </tbody>
@@ -140,15 +154,15 @@ function RunForm({ target, image, onRan }: { target: string; image: string; onRa
         <span className="font-medium">Restart</span>
         <Picker
           label="Restart"
-          className="h-6"
+          className="w-full"
           value={spec.restart}
           options={[
-            { id: 'no', label: 'Never' },
-            { id: 'unless-stopped', label: 'Unless stopped' },
-            { id: 'always', label: 'Always' },
-            { id: 'on-failure', label: 'On failure' },
+            { value: 'no', label: 'Never' },
+            { value: 'unless-stopped', label: 'Unless stopped' },
+            { value: 'always', label: 'Always' },
+            { value: 'on-failure', label: 'On failure' },
           ]}
-          onChange={(restart) => setSpec({ ...spec, restart })}
+          onValueChange={(restart) => setSpec({ ...spec, restart })}
         />
       </label>
       <label className="flex flex-col gap-1">

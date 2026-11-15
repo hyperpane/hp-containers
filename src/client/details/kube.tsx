@@ -4,11 +4,10 @@
 
 import { useState } from 'react';
 import { Plus, RotateCw, SquareTerminal, Trash2 } from 'lucide-react';
-import { ToolButton } from '@hyperpane/ui';
+import { Picker, ToolButton } from '@hyperpane/ui';
 import type { Action } from '../../shared/index.ts';
 import { kubeDot } from '../lib/status.ts';
 import { Btn, Loading } from '../ui/controls.tsx';
-import { Picker } from '../ui/Picker.tsx';
 import { FilesView } from '../views/FilesView.tsx';
 import { InspectView } from '../views/InspectView.tsx';
 import { LogView } from '../views/LogView.tsx';
@@ -90,7 +89,7 @@ function KubePodPage(props: {
         <>
           {pod.containers.length > 1 && (
             <div className="w-40">
-              <Picker label="Container" value={container} options={[{ id: '', label: 'Every container' }, ...pod.containers.map((c) => ({ id: c, label: c }))]} onChange={setContainer} className="h-6" />
+              <Picker label="Container" value={container} options={[{ value: '', label: 'Every container' }, ...pod.containers.map((c) => ({ value: c, label: c }))]} onValueChange={setContainer} className="w-full" />
             </div>
           )}
           <Btn icon={SquareTerminal} disabled={pod.phase !== 'Running'} onClick={() => props.shell({ container: container || undefined })}>

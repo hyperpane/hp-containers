@@ -4,7 +4,7 @@
 // project's own start, stop, restart and down.
 
 import { ChevronDown, ChevronRight, ListTree, Play, RotateCw, Square, SquareTerminal, Trash2 } from 'lucide-react';
-import { ToolButton, cn } from '@hyperpane/ui';
+import { Checkbox, ToolButton, cn } from '@hyperpane/ui';
 import type { Container } from '../../shared/index.ts';
 import { DOT, openable } from '../lib/status.ts';
 import { Acts, Table, Toolbar, Tr, td } from './table.tsx';
@@ -84,12 +84,9 @@ export function containersList(props: ListProps & ContainersState) {
         <span className="text-[var(--node-muted)]">
           {running} of {snap.containers?.length ?? 0} running
         </span>
-        <label className="flex items-center gap-1 text-[var(--node-muted)]">
-          <input type="checkbox" checked={onlyRunning} onChange={(e) => setOnlyRunning(e.target.checked)} />
-          Only running
-        </label>
+        <Checkbox className="gap-1.5 text-xs text-[var(--node-muted)]" label="Only running" checked={onlyRunning} onCheckedChange={setOnlyRunning} />
       </Toolbar>
-      <Table cols={[{ title: 'Name', w: '30%' }, wide && { title: 'Image', w: '22%' }, { title: 'Status' }, { title: 'Ports', w: '16%' }, { title: '', actions: 4 }]} empty={!list.length}>
+      <Table id="containers" cols={[{ title: 'Name', w: '30%' }, wide && { title: 'Image', w: '22%' }, { title: 'Status' }, { title: 'Ports', w: '16%' }, { title: '', actions: 4 }]} empty={!list.length}>
         {ordered.map(([group, items]) =>
           group ? (
             [

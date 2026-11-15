@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Copy, Search, Trash2 } from 'lucide-react';
 import { useHost } from '@hyperpane/sdk/client';
-import { NodeInput, ToolButton } from '@hyperpane/ui';
+import { Checkbox, NodeInput, ToolButton } from '@hyperpane/ui';
 import { ANSI } from '../lib/ansi.ts';
 import { ID } from '../lib/calls.ts';
 
@@ -40,15 +40,9 @@ export function LogView({ request, timestamps }: { request: Record<string, unkno
           <NodeInput className="w-full pl-6" placeholder="Show only lines with…" value={find} onChange={(e) => setFind(e.target.value)} />
         </div>
         {timestamps && (
-          <label className="flex items-center gap-1 text-[var(--node-muted)]">
-            <input type="checkbox" checked={ts} onChange={(e) => setTs(e.target.checked)} />
-            Times
-          </label>
+          <Checkbox className="flex-none gap-1.5 text-xs text-[var(--node-muted)]" label="Times" checked={ts} onCheckedChange={setTs} />
         )}
-        <label className="flex items-center gap-1 text-[var(--node-muted)]">
-          <input type="checkbox" checked={follow} onChange={(e) => setFollow(e.target.checked)} />
-          Follow
-        </label>
+        <Checkbox className="flex-none gap-1.5 text-xs text-[var(--node-muted)]" label="Follow" checked={follow} onCheckedChange={setFollow} />
         <ToolButton label="Copy the log" icon={Copy} onClick={() => void host.app.clipboardWrite({ text: lines ? lines.join('\n') : text })} />
         <ToolButton label="Clear" icon={Trash2} onClick={() => setText('')} />
       </div>

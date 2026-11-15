@@ -26,7 +26,7 @@ export function volumesList(props: ListProps) {
           Clean up
         </Btn>
       </Toolbar>
-      <Table cols={[{ title: 'Name', w: '45%' }, { title: 'Used by' }, wide && { title: 'Driver', w: '14%' }, { title: '', actions: 1 }]} empty={!list.length}>
+      <Table id="volumes" cols={[{ title: 'Name', w: '45%' }, { title: 'Used by' }, wide && { title: 'Driver', w: '14%' }, { title: '', actions: 1 }]} empty={!list.length}>
         {list.map((v) => (
           <Tr key={v.name} onClick={() => onOpen({ thing: 'volume', id: v.name, name: v.name })}>
             <td className={cn(td, 'font-medium')} title={v.name}>

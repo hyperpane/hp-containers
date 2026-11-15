@@ -16,6 +16,7 @@ export function kubePodsList(props: ListProps) {
     <>
       <Toolbar title="Pods" filter={filter} setFilter={setFilter} />
       <Table
+        id="pods"
         cols={[{ title: 'Name', w: '34%' }, { title: 'Status' }, { title: 'Ready', w: '9%' }, wide && { title: 'Restarts', w: '10%' }, wide && { title: 'Age', w: '12%' }, wide && { title: 'Node', w: '14%' }, { title: '', actions: 2 }]}
         empty={!list.length}
       >
@@ -59,7 +60,7 @@ export function deploymentsList(props: ListProps) {
   return (
     <>
       <Toolbar title="Deployments" filter={filter} setFilter={setFilter} />
-      <Table cols={[{ title: 'Name', w: '50%' }, { title: 'Ready' }, wide && { title: 'Age' }, { title: '', actions: 2 }]} empty={!list.length}>
+      <Table id="deployments" cols={[{ title: 'Name', w: '50%' }, { title: 'Ready' }, wide && { title: 'Age' }, { title: '', actions: 2 }]} empty={!list.length}>
         {list.map((d) => {
           const [ready, want] = d.ready.split('/').map(Number);
           return (
@@ -100,7 +101,7 @@ export function servicesList(props: ListProps) {
   return (
     <>
       <Toolbar title="Services" filter={filter} setFilter={setFilter} />
-      <Table cols={[{ title: 'Name', w: '30%' }, { title: 'Type' }, wide && { title: 'Cluster IP' }, { title: 'Ports' }, wide && { title: 'Age' }]} empty={!list.length}>
+      <Table id="services" cols={[{ title: 'Name', w: '30%' }, { title: 'Type' }, wide && { title: 'Cluster IP' }, { title: 'Ports' }, wide && { title: 'Age' }]} empty={!list.length}>
         {list.map((s) => (
           <Tr key={`${s.namespace}/${s.name}`} onClick={() => onOpen({ thing: 'service', id: s.name, name: s.name, namespace: s.namespace })}>
             <td className={cn(td, 'font-medium')}>

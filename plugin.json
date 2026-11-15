@@ -9,23 +9,36 @@
   "category": "DevOps",
   "homepage": "https://github.com/hyperpane/hp-containers",
   "license": "MIT",
-  "engines": { "hyperpane": ">=0.2.0", "node": ">=22.15.0" },
-  "permissions": ["terminal"],
-  "client": { "main": "main.tsx" },
-  "server": { "runtime": "node", "main": "main.ts" },
+  "engines": {
+    "hyperpane": ">=0.2.2",
+    "node": ">=22.15.0"
+  },
+  "permissions": [
+    "terminal"
+  ],
+  "client": {
+    "main": "main.tsx"
+  },
+  "server": {
+    "runtime": "node",
+    "main": "main.ts"
+  },
   "contributes": {
     "nodes": [
       {
         "kind": "containers",
         "title": "Containers",
         "icon": "icon.svg",
-        "size": [920, 580]
+        "size": [
+          920,
+          580
+        ]
       }
     ]
   },
   "signature": {
     "key": "ed25519:5LgmP9NjLnpvz48igrFekSqi+4k6gzaO8sNwlsgNKFc=",
-    "sig": "aCcc+pXq1YUcsU+gJAJGrHWP4S6Hj8zz/ay+RjTxK6/j9Y5vF4EAY5eqs6ztZ5hjXyqYoYzKnAGLby6x3eF8BA==",
-    "server": "WF748fTrZC7nhDyRZnVI+G/o8fFjBcwse+xJOYz89PE+vEHIh2plJhzJ2GjwpfE4Kqm7XBAKfYwnD7yzyR4uBA=="
+    "sig": "pSoEvJhexDpVZCJghViUqk2Vnk7/Vqxu9eTYDAfK0YVR7At6xF0thFHl5NnscMRKuF5yfXN/kJhsDqlgx9E1AA==",
+    "server": "o/2VfQ7MGR0yly5zpRsezax8QRyfnHD7RSSxZtpl+1RRuWc6a0HDbiGAtKyJP1em7kpugjl+4GsGhN7Bk9usCA=="
   }
 }

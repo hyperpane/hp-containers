@@ -29,7 +29,7 @@ export function imagesList(props: ListProps) {
           Clean up
         </Btn>
       </Toolbar>
-      <Table cols={[{ title: 'Name', w: '40%' }, wide && { title: 'Id', w: '15%' }, wide && { title: 'Created' }, { title: 'Size', w: '12%' }, { title: '', actions: 2 }]} empty={!list.length}>
+      <Table id="images" cols={[{ title: 'Name', w: '40%' }, wide && { title: 'Id', w: '15%' }, wide && { title: 'Created' }, { title: 'Size', w: '12%' }, { title: '', actions: 2 }]} empty={!list.length}>
         {list.map((i) => {
           const ref = i.name === '<none>' ? i.id : i.name;
           return (
