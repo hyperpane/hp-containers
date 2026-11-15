@@ -46,7 +46,7 @@ export function ProcessPage(props: DetailProps) {
             label="Delete from pm2"
             icon={Trash2}
             onClick={async () => {
-              if (await confirm(`Delete ${p.name} from pm2?`, 'It stops, and pm2 forgets it.', 'Delete')) void act('pm2Delete', {}, true);
+              if (await confirm(`Delete ${p.name} from pm2?`, 'It stops, and pm2 forgets it', 'Delete')) void act('pm2Delete', {}, true);
             }}
           />
         </>,

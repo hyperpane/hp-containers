@@ -73,7 +73,7 @@ export function ContainerPage(props: DetailProps) {
               icon={Skull}
               disabled={busy}
               onClick={async () => {
-                if (await confirm(`Kill ${c.name}?`, 'It stops at once, without the time to finish cleanly.', 'Kill')) void act('kill');
+                if (await confirm(`Kill ${c.name}?`, 'It stops at once, without the time to finish cleanly', 'Kill')) void act('kill');
               }}
             />
           )}
@@ -82,7 +82,7 @@ export function ContainerPage(props: DetailProps) {
             icon={Trash2}
             disabled={busy}
             onClick={async () => {
-              if (await confirm(`Remove ${c.name}?`, 'The container goes (its volumes stay).', 'Remove')) void act('remove', {}, true);
+              if (await confirm(`Remove ${c.name}?`, 'The container goes (its volumes stay)', 'Remove')) void act('remove', {}, true);
             }}
           />
         </>,
@@ -97,7 +97,7 @@ export function ContainerPage(props: DetailProps) {
           c.state === 'running' ? (
             <FilesView request={{ target: t, id: c.id }} canCopy />
           ) : (
-            <Loading>Start it to walk its files (they’re listed by a shell inside it).</Loading>
+            <Loading>Start it to walk its files (they’re listed by a shell inside it)</Loading>
           )
         ) : (
           <StatsView target={t} id={c.id} />

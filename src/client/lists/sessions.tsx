@@ -33,7 +33,7 @@ export function sessionsList(props: ListProps) {
                 label="End the session"
                 icon={Trash2}
                 onClick={async () => {
-                  if (await confirm(`End ${s.name}?`, 'The session and what runs in it end.', 'End')) void act('sessionKill', s.id);
+                  if (await confirm(`End ${s.name}?`, 'The session and what runs in it end', 'End')) void act('sessionKill', s.id);
                 }}
               />
             </Acts>

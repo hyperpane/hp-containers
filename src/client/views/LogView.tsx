@@ -25,7 +25,7 @@ export function LogView({ request, timestamps }: { request: Record<string, unkno
     setText('');
     setEnded(null);
     return host.subscribe<{ text: string }>(ID, { op: 'logs', ...request, timestamps: ts }, (e) => setText((t) => (t + e.text.replace(ANSI, '')).slice(-MAX_LOG)), {
-      onEnd: (e) => setEnded(e ?? 'The log ended.'),
+      onEnd: (e) => setEnded(e ?? 'The log ended'),
     });
   }, [host, key, ts]);
   useEffect(() => {
@@ -37,7 +37,7 @@ export function LogView({ request, timestamps }: { request: Record<string, unkno
       <div className="flex items-center gap-1.5 px-3 py-1.5">
         <div className="relative min-w-0 flex-1">
           <Search className="absolute top-1.5 left-1.5 size-3 text-[var(--node-muted)]" />
-          <NodeInput className="w-full pl-6" placeholder="Show only lines with…" value={find} onChange={(e) => setFind(e.target.value)} />
+          <NodeInput className="w-full pl-6" placeholder="Show only lines with" value={find} onChange={(e) => setFind(e.target.value)} />
         </div>
         {timestamps && (
           <Checkbox className="flex-none gap-1.5 text-xs text-[var(--node-muted)]" label="Times" checked={ts} onCheckedChange={setTs} />
@@ -54,7 +54,7 @@ export function LogView({ request, timestamps }: { request: Record<string, unkno
         }}
         className="mx-3 mb-2 min-h-0 flex-1 overflow-auto rounded-md border border-[var(--node-border)] bg-[color-mix(in_srgb,var(--node-fg)_4%,transparent)] p-2 font-mono text-[11px] leading-4 whitespace-pre-wrap select-text"
       >
-        {lines ? lines.join('\n') : text || (!ended && <span className="text-[var(--node-muted)]">Waiting for the log…</span>)}
+        {lines ? lines.join('\n') : text || (!ended && <span className="text-[var(--node-muted)]">Waiting for the log</span>)}
         {ended && <span className="block text-[var(--node-muted)] italic">{ended}</span>}
       </pre>
     </div>

@@ -49,7 +49,7 @@ export function Table({ id, cols, children, empty }: { id: string; cols: Col[]; 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
       {empty ? (
-        <p className="px-3 py-4 text-[var(--node-muted)]">Nothing here.</p>
+        <p className="px-3 py-4 text-[var(--node-muted)]">Nothing here</p>
       ) : (
         <table className="w-full table-fixed border-collapse">
           <colgroup>

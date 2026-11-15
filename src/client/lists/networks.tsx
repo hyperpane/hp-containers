@@ -17,7 +17,7 @@ export function networksList(props: ListProps) {
           icon={Trash2}
           danger
           onClick={async () => {
-            if (await confirm('Remove unused networks?', 'Networks no container uses go (not bridge, host and none).', 'Remove')) {
+            if (await confirm('Remove unused networks?', 'Networks no container uses go (not bridge, host and none)', 'Remove')) {
               const r = await call<string>({ op: 'prune', target: target.id, what: 'networks' });
               if (r !== undefined) host.app.toast(r || 'Done.');
             }
@@ -43,7 +43,7 @@ export function networksList(props: ListProps) {
                   icon={Trash2}
                   disabled={is('removeNetwork', n.name)}
                   onClick={async () => {
-                    if (await confirm(`Remove the network ${n.name}?`, 'One a container uses can’t be removed.', 'Remove')) void act('removeNetwork', n.name);
+                    if (await confirm(`Remove the network ${n.name}?`, 'One a container uses can’t be removed', 'Remove')) void act('removeNetwork', n.name);
                   }}
                 />
               )}

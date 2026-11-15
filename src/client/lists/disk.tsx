@@ -22,13 +22,13 @@ export function DiskView({ target }: { target: string }) {
   };
   const buttons = useMemo(
     () => [
-      { what: 'containers', name: 'Stopped containers', message: 'Every stopped container goes.' },
-      { what: 'images', name: 'Dangling images', message: 'Images without a name (<none>) go.' },
-      { what: 'allImages', name: 'Unused images', message: 'Every image no container uses goes: they’re pulled again when needed.' },
-      { what: 'volumes', name: 'Unused volumes', message: 'Anonymous volumes no container uses go, with what’s in them.' },
-      { what: 'networks', name: 'Unused networks', message: 'Networks no container uses go.' },
-      { what: 'buildCache', name: 'Build cache', message: 'The build cache goes: the next builds take longer.' },
-      { what: 'system', name: 'Everything unused', message: 'Stopped containers, unused networks, dangling images and the build cache go.' },
+      { what: 'containers', name: 'Stopped containers', message: 'Every stopped container goes' },
+      { what: 'images', name: 'Dangling images', message: 'Images without a name (<none>) go' },
+      { what: 'allImages', name: 'Unused images', message: 'Every image no container uses goes: they’re pulled again when needed' },
+      { what: 'volumes', name: 'Unused volumes', message: 'Anonymous volumes no container uses go, with what’s in them' },
+      { what: 'networks', name: 'Unused networks', message: 'Networks no container uses go' },
+      { what: 'buildCache', name: 'Build cache', message: 'The build cache goes: the next builds take longer' },
+      { what: 'system', name: 'Everything unused', message: 'Stopped containers, unused networks, dangling images and the build cache go' },
     ],
     [],
   );

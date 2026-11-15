@@ -15,5 +15,5 @@ export function Btn({ icon: Icon, children, danger, ...props }: React.ComponentP
 
 export function Loading({ error, children }: { error?: string; children?: React.ReactNode }) {
   if (error) return <p className="px-3 py-3 text-[var(--ansi-1)]">{error}</p>;
-  return <p className="px-3 py-3 text-[var(--node-muted)]">{children ?? 'Loading…'}</p>;
+  return <p className="px-3 py-3 text-[var(--node-muted)]">{children ?? 'Loading'}</p>;
 }

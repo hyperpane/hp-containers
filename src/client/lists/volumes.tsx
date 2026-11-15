@@ -17,7 +17,7 @@ export function volumesList(props: ListProps) {
           icon={Trash2}
           danger
           onClick={async () => {
-            if (await confirm('Remove unused volumes?', 'Anonymous volumes no container uses go, with what’s in them.', 'Remove')) {
+            if (await confirm('Remove unused volumes?', 'Anonymous volumes no container uses go, with what’s in them', 'Remove')) {
               const r = await call<string>({ op: 'prune', target: target.id, what: 'volumes' });
               if (r) host.app.toast(r);
             }

@@ -47,7 +47,7 @@ export function processesList(props: ListProps) {
                   label="Delete from pm2"
                   icon={Trash2}
                   onClick={async () => {
-                    if (await confirm(`Delete ${p.name} from pm2?`, 'It stops, and pm2 forgets it (until it’s started again).', 'Delete')) void act('pm2Delete', p.id);
+                    if (await confirm(`Delete ${p.name} from pm2?`, 'It stops, and pm2 forgets it (until it’s started again)', 'Delete')) void act('pm2Delete', p.id);
                   }}
                 />
               </Acts>

@@ -28,7 +28,7 @@ export function SessionPage(props: DetailProps) {
             label="End the session"
             icon={Trash2}
             onClick={async () => {
-              if (await confirm(`End ${s.name}?`, 'The session and what runs in it end.', 'End')) void act('sessionKill', {}, true);
+              if (await confirm(`End ${s.name}?`, 'The session and what runs in it end', 'End')) void act('sessionKill', {}, true);
             }}
           />
         </>,

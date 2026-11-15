@@ -44,7 +44,7 @@ export function List({ section, target, snap, ns, narrow, onOpen }: { section: S
   };
   const is = (action: Action, id: string) => busy.has(`${action}:${id}`);
   const shell = (id: string, extra: Record<string, unknown> = {}) =>
-    project ? void call({ op: 'shell', project: project.id, target: target.id, id, ...extra }) : host.app.toast('Open a project to open a terminal in it.', { error: true });
+    project ? void call({ op: 'shell', project: project.id, target: target.id, id, ...extra }) : host.app.toast('Open a project to open a terminal in it', { error: true });
   const all = ns === '*';
 
   const p: ListProps = { target, snap, wide, all, host, call, confirm, filter, setFilter, match, act, is, shell, onOpen };

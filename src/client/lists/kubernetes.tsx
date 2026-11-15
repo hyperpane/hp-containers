@@ -43,7 +43,7 @@ export function kubePodsList(props: ListProps) {
                 icon={Trash2}
                 disabled={is('deletePod', p.name)}
                 onClick={async () => {
-                  if (await confirm(`Delete ${p.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone.', 'Delete')) void act('deletePod', p.name, { namespace: p.namespace });
+                  if (await confirm(`Delete ${p.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone', 'Delete')) void act('deletePod', p.name, { namespace: p.namespace });
                 }}
               />
             </Acts>

@@ -61,8 +61,8 @@ export function ContainersView() {
   }, [target?.id, ns, host, tick]);
 
   if (error) return <NodeMessage error>{error}</NodeMessage>;
-  if (!targets) return <NodeMessage>Looking for Docker, Podman, nerdctl, kubectl, pm2, tmux and screen…</NodeMessage>;
-  if (!targets.length) return <NodeMessage>No managers.</NodeMessage>;
+  if (!targets) return <NodeMessage>Looking for Docker, Podman, nerdctl, kubectl, pm2, tmux and screen</NodeMessage>;
+  if (!targets.length) return <NodeMessage>No managers</NodeMessage>;
 
   const sections = sectionsFor(target?.kind, snap);
   const narrow = mainWidth > 0 && mainWidth < 620;

@@ -27,7 +27,7 @@ export function FilesView({ request, canCopy }: { request: Record<string, unknow
   };
   const up = dir === '/' ? null : dir.slice(0, dir.lastIndexOf('/')) || '/';
   const copyOut = async (p: string) => {
-    if (!project) return host.app.toast('Open a project to copy into it.', { error: true });
+    if (!project) return host.app.toast('Open a project to copy into it', { error: true });
     try {
       const where = await host.call<string>(ID, { op: 'copyToProject', project: project.id, ...request, path: p });
       host.app.toast(`Copied to ${where} in the project`);
@@ -57,7 +57,7 @@ export function FilesView({ request, canCopy }: { request: Record<string, unknow
           {list.value === undefined ? (
             <Loading error={list.error} />
           ) : list.value.length === 0 ? (
-            <p className="px-2 py-2 text-[var(--node-muted)]">Empty.</p>
+            <p className="px-2 py-2 text-[var(--node-muted)]">Empty</p>
           ) : (
             list.value.map((f) => {
               const Icon = f.type === 'dir' ? Folder : f.type === 'link' ? FileSymlink : File;

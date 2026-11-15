@@ -71,7 +71,7 @@ export function containersList(props: ListProps & ContainersState) {
             icon={Trash2}
             disabled={is('remove', c.id)}
             onClick={async () => {
-              if (await confirm(`Remove ${c.name}?`, on ? 'It’s running: it stops, and the container goes (its volumes stay).' : 'The container goes (its volumes stay).', 'Remove')) void act('remove', c.id);
+              if (await confirm(`Remove ${c.name}?`, on ? 'It’s running: it stops, and the container goes (its volumes stay)' : 'The container goes (its volumes stay)', 'Remove')) void act('remove', c.id);
             }}
           />
         </Acts>

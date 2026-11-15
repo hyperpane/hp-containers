@@ -100,7 +100,7 @@ function KubePodPage(props: {
             icon={Trash2}
             disabled={props.busy}
             onClick={async () => {
-              if (await props.confirm(`Delete ${pod.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone.', 'Delete')) void props.act('deletePod', {}, true);
+              if (await props.confirm(`Delete ${pod.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone', 'Delete')) void props.act('deletePod', {}, true);
             }}
           />
         </>,
@@ -115,7 +115,7 @@ function KubePodPage(props: {
           pod.phase === 'Running' ? (
             <FilesView key={container} request={req} canCopy={false} />
           ) : (
-            <Loading>Its files can be walked while it runs.</Loading>
+            <Loading>Its files can be walked while it runs</Loading>
           )
         ) : (
           <InspectView request={{ target, thing: 'kubePod', id: pod.name, namespace: pod.namespace }} />

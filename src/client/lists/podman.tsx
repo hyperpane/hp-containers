@@ -36,7 +36,7 @@ export function podsList(props: ListProps) {
                   label="Remove"
                   icon={Trash2}
                   onClick={async () => {
-                    if (await confirm(`Remove the pod ${p.name}?`, 'It and its containers go.', 'Remove')) void act('podRemove', p.id);
+                    if (await confirm(`Remove the pod ${p.name}?`, 'It and its containers go', 'Remove')) void act('podRemove', p.id);
                   }}
                 />
               </Acts>
