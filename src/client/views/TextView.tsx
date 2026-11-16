@@ -25,7 +25,9 @@ export function TextView({ request, every }: { request: Record<string, unknown>;
         <ToolButton label="Again" icon={RefreshCw} onClick={reload} />
         <ToolButton label="Copy" icon={Copy} onClick={() => void host.app.clipboardWrite({ text: value })} />
       </div>
-      <pre className="mx-3 mb-2 min-h-0 flex-1 overflow-auto rounded-md border border-[var(--node-border)] p-2 font-mono text-[11px] leading-4 whitespace-pre select-text">{value.replace(ANSI, '')}</pre>
+      <pre className="mx-3 mb-2 min-h-0 flex-1 overflow-auto rounded-md border border-[var(--node-border)] p-2 font-mono text-[11px] leading-4 whitespace-pre select-text">
+        {value.replace(ANSI, '')}
+      </pre>
     </div>
   );
 }

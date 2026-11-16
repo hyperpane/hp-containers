@@ -36,7 +36,9 @@ export function FilesView({ request, canCopy }: { request: Record<string, unknow
     }
   };
   const save = (p: string, folder: boolean) =>
-    void host.app.saveStream(ID, { op: 'download', ...request, path: p, folder }, { name: `${p.split('/').pop() || 'root'}${folder ? '.tar' : ''}` }).catch((e: Error) => host.app.toast(e.message, { error: true }));
+    void host.app
+      .saveStream(ID, { op: 'download', ...request, path: p, folder }, { name: `${p.split('/').pop() || 'root'}${folder ? '.tar' : ''}` })
+      .catch((e: Error) => host.app.toast(e.message, { error: true }));
 
   return (
     <div className="flex min-h-0 flex-1">
@@ -65,8 +67,13 @@ export function FilesView({ request, canCopy }: { request: Record<string, unknow
               return (
                 <div
                   key={f.name}
-                  className={cn('group flex h-6 cursor-default items-center gap-1.5 rounded px-2 hover:bg-[var(--node-hover)]', open === p && 'bg-[var(--node-hover)]')}
-                  onClick={() => (f.type === 'dir' ? go(p) : f.type === 'link' && f.link ? setOpen(f.link.startsWith('/') ? f.link : join(f.link)) : setOpen(p))}
+                  className={cn(
+                    'group flex h-6 cursor-default items-center gap-1.5 rounded px-2 hover:bg-[var(--node-hover)]',
+                    open === p && 'bg-[var(--node-hover)]',
+                  )}
+                  onClick={() =>
+                    f.type === 'dir' ? go(p) : f.type === 'link' && f.link ? setOpen(f.link.startsWith('/') ? f.link : join(f.link)) : setOpen(p)
+                  }
                 >
                   <Icon className={cn('size-3.5 flex-none', f.type === 'dir' ? 'text-[var(--ansi-4)]' : 'text-[var(--node-muted)]')} />
                   <span className="min-w-0 flex-1 truncate font-mono">
@@ -78,7 +85,11 @@ export function FilesView({ request, canCopy }: { request: Record<string, unknow
                   {canCopy && (
                     <span className="flex flex-none" onClick={(e) => e.stopPropagation()}>
                       <ToolButton label="Copy into the project" icon={FolderInput} onClick={() => void copyOut(p)} />
-                      <ToolButton label={f.type === 'dir' ? 'Save as .tar' : 'Save to this machine'} icon={Download} onClick={() => save(p, f.type === 'dir')} />
+                      <ToolButton
+                        label={f.type === 'dir' ? 'Save as .tar' : 'Save to this machine'}
+                        icon={Download}
+                        onClick={() => save(p, f.type === 'dir')}
+                      />
                     </span>
                   )}
                 </div>
@@ -91,7 +102,9 @@ export function FilesView({ request, canCopy }: { request: Record<string, unknow
         <div className="flex min-h-0 w-1/2 flex-col">
           <div className="flex items-center gap-1 px-3 py-1.5">
             <span className="min-w-0 flex-1 truncate font-mono">{open}</span>
-            {file.value?.text != null && <ToolButton label="Copy the text" icon={Copy} onClick={() => void host.app.clipboardWrite({ text: file.value!.text! })} />}
+            {file.value?.text != null && (
+              <ToolButton label="Copy the text" icon={Copy} onClick={() => void host.app.clipboardWrite({ text: file.value!.text! })} />
+            )}
             {canCopy && <ToolButton label="Save to this machine" icon={Download} onClick={() => save(open, false)} />}
           </div>
           {file.value === undefined ? (

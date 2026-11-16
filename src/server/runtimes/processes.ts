@@ -8,7 +8,7 @@ import path from 'node:path';
 import type { Action, Kind, Pm2Process, Snapshot, Target, TermSession } from '../../shared/index.ts';
 import { type Runner, said } from '../tools.ts';
 
-type Obj = Record<string, any>;
+type Obj = Record<string, unknown>;
 
 const target = (kind: Kind, name: string, ok: boolean, error: string | null, detail: string | null): Target => ({
   id: kind,
@@ -21,7 +21,7 @@ const target = (kind: Kind, name: string, ok: boolean, error: string | null, det
   namespace: null,
 });
 
-export function pm2Of(p: Obj): Pm2Process {
+function pm2Of(p: Obj): Pm2Process {
   const env = (p.pm2_env ?? {}) as Obj;
   const instances = Number(env.instances ?? 1);
   return {
@@ -29,8 +29,8 @@ export function pm2Of(p: Obj): Pm2Process {
     name: String(p.name ?? env.name ?? ''),
     status: String(env.status ?? 'unknown'),
     pid: Number(p.pid) || null,
-    cpu: Number(p.monit?.cpu ?? 0),
-    memory: Number(p.monit?.memory ?? 0),
+    cpu: Number((p.monit as Obj | undefined)?.cpu ?? 0),
+    memory: Number((p.monit as Obj | undefined)?.memory ?? 0),
     restarts: Number(env.restart_time ?? 0),
     since: env.status === 'online' && Number(env.pm_uptime) ? Number(env.pm_uptime) : null,
     cwd: String(env.pm_cwd ?? ''),
@@ -39,7 +39,7 @@ export function pm2Of(p: Obj): Pm2Process {
 }
 
 /** `pm2 jlist` may print a banner (its first run) before the JSON. */
-export function pm2List(out: string): Obj[] {
+function pm2List(out: string): Obj[] {
   const at = out.indexOf('[');
   if (at < 0) return [];
   return JSON.parse(out.slice(at, out.lastIndexOf(']') + 1)) as Obj[];
@@ -105,7 +105,7 @@ export function screensOf(out: string): TermSession[] {
 }
 
 /** tmux's `#{session_name}\t#{session_windows}\t#{session_attached}\t#{session_created}`. */
-export function tmuxOf(out: string): TermSession[] {
+function tmuxOf(out: string): TermSession[] {
   return out
     .split('\n')
     .filter(Boolean)
@@ -115,8 +115,8 @@ export function tmuxOf(out: string): TermSession[] {
     });
 }
 
-export const SCREEN_ID = /^\d+\.[A-Za-z0-9_.-]+$/;
-export const TMUX_NAME = /^[A-Za-z0-9_][A-Za-z0-9_ .@+-]{0,99}$/;
+const SCREEN_ID = /^\d+\.[A-Za-z0-9_.-]+$/;
+const TMUX_NAME = /^[A-Za-z0-9_][A-Za-z0-9_ .@+-]{0,99}$/;
 
 export class Sessions {
   readonly kind: 'screen' | 'tmux';
@@ -144,7 +144,11 @@ export class Sessions {
       const r = await this.#runner.run(this.tool, ['-ls'], 10_000);
       return { target: t.id, error: null, sessions: screensOf(r.stdout) };
     }
-    const r = await this.#runner.run(this.tool, ['list-sessions', '-F', '#{session_name}\t#{session_windows}\t#{session_attached}\t#{session_created}'], 10_000);
+    const r = await this.#runner.run(
+      this.tool,
+      ['list-sessions', '-F', '#{session_name}\t#{session_windows}\t#{session_attached}\t#{session_created}'],
+      10_000,
+    );
     // No server running: no sessions.
     if (r.code !== 0) return { target: t.id, error: /no server running|error connecting/i.test(r.stderr) ? null : said(r), sessions: [] };
     return { target: t.id, error: null, sessions: tmuxOf(r.stdout) };

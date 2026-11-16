@@ -19,7 +19,12 @@ function tarOf(name, body, type = '0') {
   h.write(name, 0);
   h.write('0000644\0', 100);
   h.write(`${body.length.toString(8).padStart(11, '0')}\0`, 124);
-  h.write(`${Math.floor(Date.now() / 1000).toString(8).padStart(11, '0')}\0`, 136);
+  h.write(
+    `${Math.floor(Date.now() / 1000)
+      .toString(8)
+      .padStart(11, '0')}\0`,
+    136,
+  );
   h.write('        ', 148);
   h.write(type, 156);
   h.write('ustar\0', 257);
@@ -40,8 +45,25 @@ if (tool === 'docker') {
   } else if (a.includes(' version ')) {
     out('"28.0.1"\n');
   } else if (a.includes(' ps -a')) {
-    json({ ID: 'aaa111bbb222ccc', Names: 'shop-db-1', Image: 'postgres:16', State: 'running', Status: 'Up 2 hours', Ports: '0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp', Labels: 'com.docker.compose.project=shop,com.docker.compose.service=db', Mounts: 'pgdata,/Users/x/shop/i…' });
-    json({ ID: 'ddd444eee555', Names: 'shop-web-1', Image: 'shop-web', State: 'exited', Status: 'Exited (1) 5 minutes ago', Ports: '', Labels: 'com.docker.compose.project=shop' });
+    json({
+      ID: 'aaa111bbb222ccc',
+      Names: 'shop-db-1',
+      Image: 'postgres:16',
+      State: 'running',
+      Status: 'Up 2 hours',
+      Ports: '0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp',
+      Labels: 'com.docker.compose.project=shop,com.docker.compose.service=db',
+      Mounts: 'pgdata,/Users/x/shop/i…',
+    });
+    json({
+      ID: 'ddd444eee555',
+      Names: 'shop-web-1',
+      Image: 'shop-web',
+      State: 'exited',
+      Status: 'Exited (1) 5 minutes ago',
+      Ports: '',
+      Labels: 'com.docker.compose.project=shop',
+    });
     json({ ID: 'fff666', Names: 'lonely', Image: 'redis', Status: 'Up 3 days (Paused)', Ports: '', Labels: '' });
   } else if (a.includes(' images')) {
     json({ ID: 'sha256:1234567890abcdef', Repository: 'postgres', Tag: '16', Size: '432MB', CreatedSince: '2 weeks ago', Containers: 'N/A' });
@@ -66,22 +88,32 @@ if (tool === 'docker') {
     out('0123456789abcdef0123456789abcdef\n');
   } else if (a.includes(' exec ') && a.includes(' sh -c ')) {
     const dir = args.at(-1);
-    if (dir === '/nope') fail('sh: cd: line 1: can\'t cd to /nope: No such file or directory', 3);
+    if (dir === '/nope') fail("sh: cd: line 1: can't cd to /nope: No such file or directory", 3);
     out('directory\t4096\t1794500000\tetc\nregular file\t12\t1794500001\t.env\nsymbolic link\t7\t1794500002\tlib\n-> usr/lib\n');
   } else if (a.includes(' cp ') && args.at(-1) === '-') {
     const from = args.at(-2).split(':').slice(1).join(':');
     if (from === '/etc') process.stdout.write(tarOf('etc/', Buffer.alloc(0), '5'));
     else process.stdout.write(tarOf(from.split('/').pop(), Buffer.from(from === '/bin/app' ? 'ELF\0\0\0binary' : 'hello from the container\n')));
   } else if (a.includes(' stats ')) {
-    out('\x1b[2J\x1b[H{"BlockIO":"1MB / 0B","CPUPerc":"12.50%","Container":"aaa","MemPerc":"3.10%","MemUsage":"64MiB / 2GiB","NetIO":"1kB / 2kB","PIDs":"7"}\n');
-    setTimeout(() => out('\x1b[2J\x1b[H{"BlockIO":"2MB / 0B","CPUPerc":"50.00%","Container":"aaa","MemPerc":"4.00%","MemUsage":"80MiB / 2GiB","NetIO":"3kB / 4kB","PIDs":"8"}\n'), 50);
+    out(
+      '\x1b[2J\x1b[H{"BlockIO":"1MB / 0B","CPUPerc":"12.50%","Container":"aaa","MemPerc":"3.10%","MemUsage":"64MiB / 2GiB","NetIO":"1kB / 2kB","PIDs":"7"}\n',
+    );
+    setTimeout(
+      () =>
+        out(
+          '\x1b[2J\x1b[H{"BlockIO":"2MB / 0B","CPUPerc":"50.00%","Container":"aaa","MemPerc":"4.00%","MemUsage":"80MiB / 2GiB","NetIO":"3kB / 4kB","PIDs":"8"}\n',
+        ),
+      50,
+    );
     setInterval(() => {}, 1 << 30);
   } else if (a.includes(' logs -f')) {
     out('db ready\n');
     process.stderr.write('a warning\n');
     setInterval(() => {}, 1 << 30);
   } else if (a.includes(' rmi ')) {
-    fail('Error response from daemon: conflict: unable to remove repository reference "postgres:16" (must force) - container aaa111 is using its referenced image');
+    fail(
+      'Error response from daemon: conflict: unable to remove repository reference "postgres:16" (must force) - container aaa111 is using its referenced image',
+    );
   } else {
     out(`${args.at(-1)}\n`);
   }
@@ -89,15 +121,40 @@ if (tool === 'docker') {
   if (a.startsWith('version')) out('5.2.0\n');
   else if (a.startsWith('ps -a')) {
     json([
-      { Id: '0123456789abcdef', Names: ['api'], Image: 'quay.io/app/api:1', State: 'running', Status: 'Up 4 minutes', Ports: [{ host_ip: '', container_port: 8080, host_port: 18080, range: 1, protocol: 'tcp' }], Labels: null, PodName: 'backend' },
-      { Id: 'fedcba9876543210', Names: ['job'], Image: 'busybox', State: 'exited', Status: '', Ports: null, Labels: { 'io.podman.compose.project': 'tools' }, PodName: '' },
+      {
+        Id: '0123456789abcdef',
+        Names: ['api'],
+        Image: 'quay.io/app/api:1',
+        State: 'running',
+        Status: 'Up 4 minutes',
+        Ports: [{ host_ip: '', container_port: 8080, host_port: 18080, range: 1, protocol: 'tcp' }],
+        Labels: null,
+        PodName: 'backend',
+      },
+      {
+        Id: 'fedcba9876543210',
+        Names: ['job'],
+        Image: 'busybox',
+        State: 'exited',
+        Status: '',
+        Ports: null,
+        Labels: { 'io.podman.compose.project': 'tools' },
+        PodName: '',
+      },
     ]);
   } else if (a.startsWith('images')) json([{ Id: 'abcdefabcdef1234', Names: ['quay.io/app/api:1'], Size: 123456789, Created: 1794000000, Containers: 1 }]);
   else if (a.startsWith('pod ps')) json([{ Id: '9999999999999999', Name: 'backend', Status: 'Running', Containers: [{ Id: 'a' }, { Id: 'b' }] }]);
   else out('ok\n');
 } else if (tool === 'kubectl') {
   if (a === 'config get-contexts -o name') out(process.env.FAKE_NO_CONTEXTS ? '' : 'prod\nkind-dev\n');
-  else if (a === 'config view -o json') json({ 'current-context': 'kind-dev', contexts: [{ name: 'kind-dev', context: { cluster: 'kind', namespace: 'web' } }, { name: 'prod', context: { cluster: 'p' } }] });
+  else if (a === 'config view -o json')
+    json({
+      'current-context': 'kind-dev',
+      contexts: [
+        { name: 'kind-dev', context: { cluster: 'kind', namespace: 'web' } },
+        { name: 'prod', context: { cluster: 'p' } },
+      ],
+    });
   else if (a.startsWith('--context prod')) fail('Unable to connect to the server: dial tcp: lookup prod.example.com: no such host');
   else if (a.includes(' version ')) json({ clientVersion: {}, serverVersion: { gitVersion: 'v1.31.0' } });
   else if (a.includes(' get pods ')) {
@@ -106,14 +163,33 @@ if (tool === 'docker') {
         {
           metadata: { name: 'web-7d4-abc', namespace: 'web', creationTimestamp: '2026-11-13T00:00:00Z' },
           spec: { nodeName: 'kind-control-plane', containers: [{ name: 'web' }, { name: 'sidecar' }] },
-          status: { phase: 'Running', containerStatuses: [{ ready: true, restartCount: 0, state: { running: {} } }, { ready: false, restartCount: 7, state: { waiting: { reason: 'CrashLoopBackOff' } } }] },
+          status: {
+            phase: 'Running',
+            containerStatuses: [
+              { ready: true, restartCount: 0, state: { running: {} } },
+              { ready: false, restartCount: 7, state: { waiting: { reason: 'CrashLoopBackOff' } } },
+            ],
+          },
         },
-        { metadata: { name: 'job-1', namespace: 'web' }, spec: { containers: [{ name: 'job' }] }, status: { phase: 'Succeeded', containerStatuses: [{ ready: false, restartCount: 0, state: { terminated: { reason: 'Completed' } } }] } },
+        {
+          metadata: { name: 'job-1', namespace: 'web' },
+          spec: { containers: [{ name: 'job' }] },
+          status: { phase: 'Succeeded', containerStatuses: [{ ready: false, restartCount: 0, state: { terminated: { reason: 'Completed' } } }] },
+        },
       ],
     });
-  } else if (a.includes(' get deployments ')) json({ items: [{ metadata: { name: 'web', namespace: 'web' }, spec: { replicas: 3 }, status: { readyReplicas: 2 } }] });
+  } else if (a.includes(' get deployments '))
+    json({ items: [{ metadata: { name: 'web', namespace: 'web' }, spec: { replicas: 3 }, status: { readyReplicas: 2 } }] });
   else if (a.includes(' get namespaces ')) out('web default kube-system');
-  else if (a.includes(' get services ')) json({ items: [{ metadata: { name: 'web', namespace: 'web' }, spec: { type: 'NodePort', clusterIP: '10.96.0.12', ports: [{ port: 80, nodePort: 30080, protocol: 'TCP' }] } }] });
+  else if (a.includes(' get services '))
+    json({
+      items: [
+        {
+          metadata: { name: 'web', namespace: 'web' },
+          spec: { type: 'NodePort', clusterIP: '10.96.0.12', ports: [{ port: 80, nodePort: 30080, protocol: 'TCP' }] },
+        },
+      ],
+    });
   else if (a.includes(' describe pod ')) out('Name:         web-7d4-abc\nNamespace:    web\nEvents:\n  Back-off restarting failed container\n');
   else if (a.includes(' exec ') && a.includes('wc -c')) out('6\nhello\n');
   else if (a.includes(' exec ')) out('regular file\t6\t1794500000\tapp.conf\n');
@@ -125,8 +201,20 @@ if (tool === 'docker') {
   if (a === 'jlist') {
     out('>>>> In-memory PM2 is out-of-date, do:\n>>>> $ pm2 update\n');
     json([
-      { pm_id: 0, name: 'api', pid: 4242, monit: { cpu: 3, memory: 52428800 }, pm2_env: { status: 'online', restart_time: 2, pm_uptime: 1794500000000, pm_cwd: '/srv/api', exec_mode: 'cluster_mode', instances: 4 } },
-      { pm_id: 1, name: 'worker', pid: 0, monit: { cpu: 0, memory: 0 }, pm2_env: { status: 'errored', restart_time: 15, pm_cwd: '/srv/worker', exec_mode: 'fork_mode' } },
+      {
+        pm_id: 0,
+        name: 'api',
+        pid: 4242,
+        monit: { cpu: 3, memory: 52428800 },
+        pm2_env: { status: 'online', restart_time: 2, pm_uptime: 1794500000000, pm_cwd: '/srv/api', exec_mode: 'cluster_mode', instances: 4 },
+      },
+      {
+        pm_id: 1,
+        name: 'worker',
+        pid: 0,
+        monit: { cpu: 0, memory: 0 },
+        pm2_env: { status: 'errored', restart_time: 15, pm_cwd: '/srv/worker', exec_mode: 'fork_mode' },
+      },
     ]);
   } else if (a === '--version') out('5.4.2\n');
   else if (a.startsWith('logs ')) {

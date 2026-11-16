@@ -24,9 +24,14 @@ export function LogView({ request, timestamps }: { request: Record<string, unkno
   useEffect(() => {
     setText('');
     setEnded(null);
-    return host.subscribe<{ text: string }>(ID, { op: 'logs', ...request, timestamps: ts }, (e) => setText((t) => (t + e.text.replace(ANSI, '')).slice(-MAX_LOG)), {
-      onEnd: (e) => setEnded(e ?? 'The log ended'),
-    });
+    return host.subscribe<{ text: string }>(
+      ID,
+      { op: 'logs', ...request, timestamps: ts },
+      (e) => setText((t) => (t + e.text.replace(ANSI, '')).slice(-MAX_LOG)),
+      {
+        onEnd: (e) => setEnded(e ?? 'The log ended'),
+      },
+    );
   }, [host, key, ts]);
   useEffect(() => {
     if (follow && box.current) box.current.scrollTop = box.current.scrollHeight;
@@ -39,9 +44,7 @@ export function LogView({ request, timestamps }: { request: Record<string, unkno
           <Search className="absolute top-1.5 left-1.5 size-3 text-[var(--node-muted)]" />
           <NodeInput className="w-full pl-6" placeholder="Show only lines with" value={find} onChange={(e) => setFind(e.target.value)} />
         </div>
-        {timestamps && (
-          <Checkbox className="flex-none gap-1.5 text-xs text-[var(--node-muted)]" label="Times" checked={ts} onCheckedChange={setTs} />
-        )}
+        {timestamps && <Checkbox className="flex-none gap-1.5 text-xs text-[var(--node-muted)]" label="Times" checked={ts} onCheckedChange={setTs} />}
         <Checkbox className="flex-none gap-1.5 text-xs text-[var(--node-muted)]" label="Follow" checked={follow} onCheckedChange={setFollow} />
         <ToolButton label="Copy the log" icon={Copy} onClick={() => void host.app.clipboardWrite({ text: lines ? lines.join('\n') : text })} />
         <ToolButton label="Clear" icon={Trash2} onClick={() => setText('')} />

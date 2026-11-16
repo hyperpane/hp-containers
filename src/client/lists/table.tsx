@@ -60,10 +60,18 @@ export function Table({ id, cols, children, empty }: { id: string; cols: Col[]; 
           <thead className={cn(styles.stickyTableHead, 'bg-[var(--node-bg)]')}>
             <tr>
               {shown.map((c, i) => (
-                <th key={i} className="relative truncate border-b border-[var(--node-border)] px-2 py-1.5 text-left font-medium text-[var(--node-muted)] first:pl-3">
+                <th
+                  key={i}
+                  className="relative truncate border-b border-[var(--node-border)] px-2 py-1.5 text-left font-medium text-[var(--node-muted)] first:pl-3"
+                >
                   {c.title}
                   {i > 0 && !c.actions && (
-                    <ColumnResizer edge="start" width={width(c.title)} onResize={(w) => sized.set(c.title, w)} onReset={() => sized.set(c.title, first[c.title])} />
+                    <ColumnResizer
+                      edge="start"
+                      width={width(c.title)}
+                      onResize={(w) => sized.set(c.title, w)}
+                      onReset={() => sized.set(c.title, first[c.title])}
+                    />
                   )}
                 </th>
               ))}

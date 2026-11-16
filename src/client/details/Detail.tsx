@@ -35,7 +35,9 @@ export function Detail({ target, snap, open, onBack, onOpen }: { target: Target;
     if (ok && back) onBack();
   };
   const shell = (extra: Record<string, unknown> = {}) =>
-    project ? void call({ op: 'shell', project: project.id, target: t, id: open.id, namespace: open.namespace, ...extra }) : host.app.toast('Open a project to open a terminal in it', { error: true });
+    project
+      ? void call({ op: 'shell', project: project.id, target: t, id: open.id, namespace: open.namespace, ...extra })
+      : host.app.toast('Open a project to open a terminal in it', { error: true });
 
   const header = (dot: string | null, sub: React.ReactNode, actions: React.ReactNode) => (
     <div className="flex flex-wrap items-center gap-2 border-b border-[var(--node-border)] px-3 py-2">

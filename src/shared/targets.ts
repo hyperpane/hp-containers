@@ -3,9 +3,6 @@
 
 export type Kind = 'docker' | 'podman' | 'nerdctl' | 'kubernetes' | 'pm2' | 'screen' | 'tmux';
 
-/** Managers of processes rather than containers. */
-export const PROCESS_KINDS: Kind[] = ['pm2', 'screen', 'tmux'];
-
 /** One container manager to look at: a Docker context, Podman, nerdctl, or a
  * kubectl context. */
 export interface Target {

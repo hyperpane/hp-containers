@@ -20,7 +20,17 @@ export function KubePodDetail(props: DetailProps) {
   const t = target.id;
   const p = snap.kubePods?.find((x) => x.name === open.id && x.namespace === open.namespace);
   if (!p) return <Gone onBack={onBack} what="This pod" />;
-  return <KubePodPage target={t} pod={p} header={(c) => header(kubeDot(p.phase), `${p.namespace} · ${p.phase} · ${p.ready} ready · ${p.restarts} restarts${p.node ? ` · ${p.node}` : ''}`, c)} shell={shell} act={act} busy={busy} confirm={confirm} />;
+  return (
+    <KubePodPage
+      target={t}
+      pod={p}
+      header={(c) => header(kubeDot(p.phase), `${p.namespace} · ${p.phase} · ${p.ready} ready · ${p.restarts} restarts${p.node ? ` · ${p.node}` : ''}`, c)}
+      shell={shell}
+      act={act}
+      busy={busy}
+      confirm={confirm}
+    />
+  );
 }
 
 export function DeploymentOrServicePage(props: DetailProps) {
@@ -89,7 +99,13 @@ function KubePodPage(props: {
         <>
           {pod.containers.length > 1 && (
             <div className="w-40">
-              <Picker label="Container" value={container} options={[{ value: '', label: 'Every container' }, ...pod.containers.map((c) => ({ value: c, label: c }))]} onValueChange={setContainer} className="w-full" />
+              <Picker
+                label="Container"
+                value={container}
+                options={[{ value: '', label: 'Every container' }, ...pod.containers.map((c) => ({ value: c, label: c }))]}
+                onValueChange={setContainer}
+                className="w-full"
+              />
             </div>
           )}
           <Btn icon={SquareTerminal} disabled={pod.phase !== 'Running'} onClick={() => props.shell({ container: container || undefined })}>
@@ -100,7 +116,8 @@ function KubePodPage(props: {
             icon={Trash2}
             disabled={props.busy}
             onClick={async () => {
-              if (await props.confirm(`Delete ${pod.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone', 'Delete')) void props.act('deletePod', {}, true);
+              if (await props.confirm(`Delete ${pod.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone', 'Delete'))
+                void props.act('deletePod', {}, true);
             }}
           />
         </>,

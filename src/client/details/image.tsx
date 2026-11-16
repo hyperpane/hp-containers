@@ -86,8 +86,12 @@ function LayersView({ target, image }: { target: string; image: string }) {
             <tr key={`${l.id}:${i}`} className="border-b border-[var(--node-border)] align-top">
               <td className="py-1.5 pl-3 text-[var(--node-muted)]">{value.length - i}</td>
               <td className="px-2 py-1.5 font-mono text-[11px] break-all whitespace-pre-wrap select-text">{l.createdBy || l.comment}</td>
-              <td className="truncate px-2 py-1.5 text-[var(--node-muted)]" title={l.size}>{l.size}</td>
-              <td className="truncate px-2 py-1.5 text-[var(--node-muted)]" title={l.created}>{l.created}</td>
+              <td className="truncate px-2 py-1.5 text-[var(--node-muted)]" title={l.size}>
+                {l.size}
+              </td>
+              <td className="truncate px-2 py-1.5 text-[var(--node-muted)]" title={l.created}>
+                {l.created}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -106,7 +110,12 @@ function Rows({ label, hint, values, set }: { label: string; hint: string; value
       </div>
       {values.map((v, i) => (
         <div key={i} className="flex gap-1">
-          <NodeInput className="min-w-0 flex-1 font-mono" placeholder={hint} value={v} onChange={(e) => set(values.map((x, j) => (j === i ? e.target.value : x)))} />
+          <NodeInput
+            className="min-w-0 flex-1 font-mono"
+            placeholder={hint}
+            value={v}
+            onChange={(e) => set(values.map((x, j) => (j === i ? e.target.value : x)))}
+          />
           <ToolButton label="Remove" icon={X} onClick={() => set(values.filter((_, j) => j !== i))} />
         </div>
       ))}
@@ -117,7 +126,14 @@ function Rows({ label, hint, values, set }: { label: string; hint: string; value
 function RunForm({ target, image, onRan }: { target: string; image: string; onRan(id: string): void }) {
   const call = useCall();
   const host = useHost();
-  const [spec, setSpec] = useState<Required<Omit<RunSpec, 'image' | 'command'>> & { command: string }>({ name: '', ports: [], env: [], volumes: [], restart: 'no', command: '' });
+  const [spec, setSpec] = useState<Required<Omit<RunSpec, 'image' | 'command'>> & { command: string }>({
+    name: '',
+    ports: [],
+    env: [],
+    volumes: [],
+    restart: 'no',
+    command: '',
+  });
   const [busy, setBusy] = useState(false);
   const run = async () => {
     setBusy(true);
@@ -167,7 +183,12 @@ function RunForm({ target, image, onRan }: { target: string; image: string; onRa
       </label>
       <label className="flex flex-col gap-1">
         <span className="font-medium">Command</span>
-        <NodeInput className="font-mono" placeholder="The image’s own (optional)" value={spec.command} onChange={(e) => setSpec({ ...spec, command: e.target.value })} />
+        <NodeInput
+          className="font-mono"
+          placeholder="The image’s own (optional)"
+          value={spec.command}
+          onChange={(e) => setSpec({ ...spec, command: e.target.value })}
+        />
       </label>
       <div>
         <Btn icon={Play} disabled={busy} onClick={() => void run()}>

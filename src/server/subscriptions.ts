@@ -48,7 +48,14 @@ export function subscriptions({ runner, target, snapshot, pollEvery }: Ctx): Sub
         }
         await new Promise<void>((resolve) => {
           const timer = setTimeout(resolve, pollEvery);
-          out.signal.addEventListener('abort', () => (clearTimeout(timer), resolve()), { once: true });
+          out.signal.addEventListener(
+            'abort',
+            () => {
+              clearTimeout(timer);
+              resolve();
+            },
+            { once: true },
+          );
         });
       }
     },

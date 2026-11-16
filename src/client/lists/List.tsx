@@ -20,7 +20,21 @@ import { sessionsList } from './sessions.tsx';
 import type { ListProps } from './types.ts';
 import { volumesList } from './volumes.tsx';
 
-export function List({ section, target, snap, ns, narrow, onOpen }: { section: Section; target: Target; snap: Snapshot; ns?: string; narrow: boolean; onOpen(o: Open): void }) {
+export function List({
+  section,
+  target,
+  snap,
+  ns,
+  narrow,
+  onOpen,
+}: {
+  section: Section;
+  target: Target;
+  snap: Snapshot;
+  ns?: string;
+  narrow: boolean;
+  onOpen(o: Open): void;
+}) {
   const wide = !narrow;
   const host = useHost();
   const project = useProject();
@@ -31,7 +45,13 @@ export function List({ section, target, snap, ns, narrow, onOpen }: { section: S
   const [folded, setFolded] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const q = filter.trim().toLowerCase();
-  const match = (...s: (string | number | null | undefined)[]) => !q || s.some((x) => String(x ?? '').toLowerCase().includes(q));
+  const match = (...s: (string | number | null | undefined)[]) =>
+    !q ||
+    s.some((x) =>
+      String(x ?? '')
+        .toLowerCase()
+        .includes(q),
+    );
   const act = async (action: Action, id: string, extra: Record<string, unknown> = {}) => {
     const key = `${action}:${id}`;
     setBusy((b) => new Set(b).add(key));
@@ -44,7 +64,9 @@ export function List({ section, target, snap, ns, narrow, onOpen }: { section: S
   };
   const is = (action: Action, id: string) => busy.has(`${action}:${id}`);
   const shell = (id: string, extra: Record<string, unknown> = {}) =>
-    project ? void call({ op: 'shell', project: project.id, target: target.id, id, ...extra }) : host.app.toast('Open a project to open a terminal in it', { error: true });
+    project
+      ? void call({ op: 'shell', project: project.id, target: target.id, id, ...extra })
+      : host.app.toast('Open a project to open a terminal in it', { error: true });
   const all = ns === '*';
 
   const p: ListProps = { target, snap, wide, all, host, call, confirm, filter, setFilter, match, act, is, shell, onOpen };

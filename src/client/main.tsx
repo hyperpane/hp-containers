@@ -6,5 +6,9 @@ import { NodeMessage } from '@hyperpane/ui';
 import { ContainersView } from './app/ContainersView.tsx';
 
 mount((host) =>
-  host.view.type === 'node' && host.view.kind === 'containers' ? <ContainersView /> : <NodeMessage error>Containers has no “{host.view.type}” view here.</NodeMessage>,
+  host.view.type === 'node' && host.view.kind === 'containers' ? (
+    <ContainersView />
+  ) : (
+    <NodeMessage error>Containers has no “{host.view.type}” view here.</NodeMessage>
+  ),
 );

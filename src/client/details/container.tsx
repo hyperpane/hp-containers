@@ -35,7 +35,12 @@ export function ContainerPage(props: DetailProps) {
           {c.ports.map((p) => {
             const url = openable(p);
             return url ? (
-              <button key={p} type="button" className="ml-2 inline-flex items-center gap-0.5 text-[var(--node-accent)] hover:underline" onClick={() => host.app.openExternal(url)}>
+              <button
+                key={p}
+                type="button"
+                className="ml-2 inline-flex items-center gap-0.5 text-[var(--node-accent)] hover:underline"
+                onClick={() => host.app.openExternal(url)}
+              >
                 {p.split('->')[0]}
                 <ExternalLink className="size-3" />
               </button>

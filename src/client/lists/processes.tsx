@@ -16,7 +16,16 @@ export function processesList(props: ListProps) {
       <Toolbar title="Processes" filter={filter} setFilter={setFilter} />
       <Table
         id="processes"
-        cols={[{ title: 'Name', w: '28%' }, { title: 'Status' }, { title: 'CPU', w: '8%' }, { title: 'Memory', w: '11%' }, wide && { title: 'Restarts', w: '9%' }, wide && { title: 'Uptime' }, wide && { title: 'Mode' }, { title: '', actions: 3 }]}
+        cols={[
+          { title: 'Name', w: '28%' },
+          { title: 'Status' },
+          { title: 'CPU', w: '8%' },
+          { title: 'Memory', w: '11%' },
+          wide && { title: 'Restarts', w: '9%' },
+          wide && { title: 'Uptime' },
+          wide && { title: 'Mode' },
+          { title: '', actions: 3 },
+        ]}
         empty={!list.length}
       >
         {list.map((p) => {
@@ -47,7 +56,8 @@ export function processesList(props: ListProps) {
                   label="Delete from pm2"
                   icon={Trash2}
                   onClick={async () => {
-                    if (await confirm(`Delete ${p.name} from pm2?`, 'It stops, and pm2 forgets it (until it’s started again)', 'Delete')) void act('pm2Delete', p.id);
+                    if (await confirm(`Delete ${p.name} from pm2?`, 'It stops, and pm2 forgets it (until it’s started again)', 'Delete'))
+                      void act('pm2Delete', p.id);
                   }}
                 />
               </Acts>

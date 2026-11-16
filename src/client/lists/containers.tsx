@@ -38,7 +38,11 @@ export function containersList(props: ListProps & ContainersState) {
             </span>
           </div>
         </td>
-        {wide && <td className={cn(td, 'text-[var(--node-muted)]')} title={c.image}>{c.image}</td>}
+        {wide && (
+          <td className={cn(td, 'text-[var(--node-muted)]')} title={c.image}>
+            {c.image}
+          </td>
+        )}
         <td className={cn(td, 'text-[var(--node-muted)]')} title={c.status}>
           {c.status}
         </td>
@@ -71,7 +75,14 @@ export function containersList(props: ListProps & ContainersState) {
             icon={Trash2}
             disabled={is('remove', c.id)}
             onClick={async () => {
-              if (await confirm(`Remove ${c.name}?`, on ? 'It’s running: it stops, and the container goes (its volumes stay)' : 'The container goes (its volumes stay)', 'Remove')) void act('remove', c.id);
+              if (
+                await confirm(
+                  `Remove ${c.name}?`,
+                  on ? 'It’s running: it stops, and the container goes (its volumes stay)' : 'The container goes (its volumes stay)',
+                  'Remove',
+                )
+              )
+                void act('remove', c.id);
             }}
           />
         </Acts>
@@ -86,56 +97,64 @@ export function containersList(props: ListProps & ContainersState) {
         </span>
         <Checkbox className="gap-1.5 text-xs text-[var(--node-muted)]" label="Only running" checked={onlyRunning} onCheckedChange={setOnlyRunning} />
       </Toolbar>
-      <Table id="containers" cols={[{ title: 'Name', w: '30%' }, wide && { title: 'Image', w: '22%' }, { title: 'Status' }, { title: 'Ports', w: '16%' }, { title: '', actions: 4 }]} empty={!list.length}>
+      <Table
+        id="containers"
+        cols={[{ title: 'Name', w: '30%' }, wide && { title: 'Image', w: '22%' }, { title: 'Status' }, { title: 'Ports', w: '16%' }, { title: '', actions: 4 }]}
+        empty={!list.length}
+      >
         {ordered.map(([group, items]) =>
-          group ? (
-            [
-              <Tr key={`g:${group}`}>
-                <td className={cn(td, 'font-medium')} colSpan={wide ? 3 : 2}>
-                  <button
-                    type="button"
-                    className="flex items-center gap-1.5"
-                    onClick={() =>
-                      setFolded((f) => {
-                        const n = new Set(f);
-                        if (n.has(group)) n.delete(group);
-                        else n.add(group);
-                        return n;
-                      })
-                    }
-                  >
-                    {folded.has(group) ? <ChevronRight className="size-3.5" /> : <ChevronDown className="size-3.5" />}
-                    <ListTree className="size-3.5 text-[var(--node-muted)]" />
-                    {group}
-                    <span className="font-normal text-[var(--node-muted)]">
-                      {items.filter((c) => c.state === 'running').length}/{items.length} running
-                    </span>
-                  </button>
-                </td>
-                <td className={td} />
-                {snap.pods?.some((p) => p.name === group) ? (
+          group
+            ? [
+                <Tr key={`g:${group}`}>
+                  <td className={cn(td, 'font-medium')} colSpan={wide ? 3 : 2}>
+                    <button
+                      type="button"
+                      className="flex items-center gap-1.5"
+                      onClick={() =>
+                        setFolded((f) => {
+                          const n = new Set(f);
+                          if (n.has(group)) n.delete(group);
+                          else n.add(group);
+                          return n;
+                        })
+                      }
+                    >
+                      {folded.has(group) ? <ChevronRight className="size-3.5" /> : <ChevronDown className="size-3.5" />}
+                      <ListTree className="size-3.5 text-[var(--node-muted)]" />
+                      {group}
+                      <span className="font-normal text-[var(--node-muted)]">
+                        {items.filter((c) => c.state === 'running').length}/{items.length} running
+                      </span>
+                    </button>
+                  </td>
                   <td className={td} />
-                ) : (
-                  <Acts>
-                    <ToolButton label="Start the project" icon={Play} disabled={is('composeStart', group)} onClick={() => void act('composeStart', group)} />
-                    <ToolButton label="Stop the project" icon={Square} disabled={is('composeStop', group)} onClick={() => void act('composeStop', group)} />
-                    <ToolButton label="Restart the project" icon={RotateCw} disabled={is('composeRestart', group)} onClick={() => void act('composeRestart', group)} />
-                    <ToolButton
-                      label="Down: remove its containers and networks"
-                      icon={Trash2}
-                      disabled={is('composeDown', group)}
-                      onClick={async () => {
-                        if (await confirm(`Down ${group}?`, 'Its containers and networks are removed (compose down). Volumes stay.', 'Down')) void act('composeDown', group);
-                      }}
-                    />
-                  </Acts>
-                )}
-              </Tr>,
-              ...(folded.has(group) ? [] : items.map((c) => row(c, true))),
-            ]
-          ) : (
-            items.map((c) => row(c, false))
-          ),
+                  {snap.pods?.some((p) => p.name === group) ? (
+                    <td className={td} />
+                  ) : (
+                    <Acts>
+                      <ToolButton label="Start the project" icon={Play} disabled={is('composeStart', group)} onClick={() => void act('composeStart', group)} />
+                      <ToolButton label="Stop the project" icon={Square} disabled={is('composeStop', group)} onClick={() => void act('composeStop', group)} />
+                      <ToolButton
+                        label="Restart the project"
+                        icon={RotateCw}
+                        disabled={is('composeRestart', group)}
+                        onClick={() => void act('composeRestart', group)}
+                      />
+                      <ToolButton
+                        label="Down: remove its containers and networks"
+                        icon={Trash2}
+                        disabled={is('composeDown', group)}
+                        onClick={async () => {
+                          if (await confirm(`Down ${group}?`, 'Its containers and networks are removed (compose down). Volumes stay.', 'Down'))
+                            void act('composeDown', group);
+                        }}
+                      />
+                    </Acts>
+                  )}
+                </Tr>,
+                ...(folded.has(group) ? [] : items.map((c) => row(c, true))),
+              ]
+            : items.map((c) => row(c, false)),
         )}
       </Table>
     </>

@@ -14,12 +14,16 @@ export function fileCalls({ host, runner, target }: Ctx): Calls {
   return {
     files: async ({ target: id, id: thing, path: dir, namespace, container: c }) => {
       const f = await target(id);
-      return said(async () => (f.kube ? f.kube.list(f.t, name(thing), one(f.t, namespace), container(c), dir) : only(f, 'engine', 'show files').list(f.t, name(thing), dir)));
+      return said(async () =>
+        f.kube ? f.kube.list(f.t, name(thing), one(f.t, namespace), container(c), dir) : only(f, 'engine', 'show files').list(f.t, name(thing), dir),
+      );
     },
 
     readFile: async ({ target: id, id: thing, path: file, namespace, container: c }) => {
       const f = await target(id);
-      return said(async () => (f.kube ? f.kube.read(f.t, name(thing), one(f.t, namespace), container(c), file) : only(f, 'engine', 'show files').read(f.t, name(thing), file)));
+      return said(async () =>
+        f.kube ? f.kube.read(f.t, name(thing), one(f.t, namespace), container(c), file) : only(f, 'engine', 'show files').read(f.t, name(thing), file),
+      );
     },
 
     // A file or a folder out of a container, into the project's folder

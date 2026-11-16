@@ -53,7 +53,17 @@ export function managers(runner: Runner, find: (name: string) => string | null):
     known = new Map(all.map((t) => [t.id, t]));
     // The ones not here: listed last, saying how to get them.
     const missing = MANAGERS.filter((m) => !all.some((t) => t.kind === m.kind)).map(
-      (m): Target => ({ id: `missing:${m.kind}`, kind: m.kind, name: m.name, context: null, ok: false, error: `${m.name} isn’t on this server. ${m.install}`, detail: 'Not installed', namespace: null, installed: false }),
+      (m): Target => ({
+        id: `missing:${m.kind}`,
+        kind: m.kind,
+        name: m.name,
+        context: null,
+        ok: false,
+        error: `${m.name} isn’t on this server. ${m.install}`,
+        detail: 'Not installed',
+        namespace: null,
+        installed: false,
+      }),
     );
     return [...all, ...missing];
   }

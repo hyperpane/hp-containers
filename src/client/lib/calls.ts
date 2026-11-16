@@ -11,7 +11,7 @@ export type Host = ReturnType<typeof useHost>;
 /** Calls the server part, toasting what goes wrong. */
 export function useCall() {
   const host = useHost();
-  return async <T,>(req: Record<string, unknown>): Promise<T | undefined> => {
+  return async <T>(req: Record<string, unknown>): Promise<T | undefined> => {
     try {
       return await host.call<T>(ID, req);
     } catch (e) {

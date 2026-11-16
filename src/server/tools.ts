@@ -10,7 +10,7 @@ import path from 'node:path';
 export type Spawn = (cmd: string, args: string[], o: SpawnOptions) => ChildProcess;
 
 /** Where container tools live besides PATH. */
-export function extraDirs(home = os.homedir()): string[] {
+function extraDirs(home = os.homedir()): string[] {
   if (process.platform === 'win32') {
     const pf = process.env.ProgramFiles ?? 'C:\\Program Files';
     return [path.join(pf, 'Docker', 'Docker', 'resources', 'bin'), path.join(pf, 'RedHat', 'Podman'), path.join(home, '.rd', 'bin')];
@@ -49,7 +49,7 @@ function nvmBins(home: string): string[] {
 }
 
 /** PATH with those added (after what's there). */
-export function searchPath(env: NodeJS.ProcessEnv = process.env): string {
+function searchPath(env: NodeJS.ProcessEnv = process.env): string {
   const have = (env.PATH ?? '').split(path.delimiter).filter(Boolean);
   return [...have, ...extraDirs().filter((d) => !have.includes(d))].join(path.delimiter);
 }

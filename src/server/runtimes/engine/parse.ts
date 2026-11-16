@@ -26,7 +26,10 @@ export function stateOf(state: unknown, status: string): State {
 /** `0.0.0.0:8080->80/tcp, [::]:8080->80/tcp` as `8080->80/tcp`, once. */
 export function portsOf(ports: string): string[] {
   const out = new Set<string>();
-  for (const p of ports.split(',').map((x) => x.trim()).filter(Boolean)) {
+  for (const p of ports
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean)) {
     out.add(p.replace(/^(0\.0\.0\.0|\[::\]|::|):(?=\d)/, '').replace(/^:::/, ''));
   }
   return [...out];
@@ -102,7 +105,9 @@ export function imageOf(kind: EngineKind, raw: Record<string, unknown>): Image {
     const names = Array.isArray(raw.Names) ? (raw.Names as string[]) : [];
     const created = Number(raw.Created);
     return {
-      id: str(raw.Id).replace(/^sha256:/, '').slice(0, 12),
+      id: str(raw.Id)
+        .replace(/^sha256:/, '')
+        .slice(0, 12),
       name: names[0] ?? '<none>',
       size: size(Number(raw.Size)),
       created: Number.isFinite(created) ? new Date(created * 1000).toISOString().slice(0, 10) : '',
@@ -113,7 +118,9 @@ export function imageOf(kind: EngineKind, raw: Record<string, unknown>): Image {
   const tag = str(raw.Tag);
   const containers = Number(raw.Containers);
   return {
-    id: str(raw.ID).replace(/^sha256:/, '').slice(0, 12),
+    id: str(raw.ID)
+      .replace(/^sha256:/, '')
+      .slice(0, 12),
     name: repo === '<none>' || !repo ? '<none>' : tag && tag !== '<none>' ? `${repo}:${tag}` : repo,
     size: str(raw.Size),
     created: str(raw.CreatedSince) || str(raw.CreatedAt),

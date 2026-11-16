@@ -29,7 +29,14 @@ function tools(only = ['docker', 'podman', 'kubectl']) {
   }
   const host = testHost({ id: 'containers' });
   const plugin = make({ which: (n) => (only.includes(n) ? path.join(dir, n) : null), pollEvery: 50 })(host);
-  const runs = (): string[][] => (existsSync(log) ? readFileSync(log, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
+  const runs = (): string[][] =>
+    existsSync(log)
+      ? readFileSync(log, 'utf8')
+          .trim()
+          .split('\n')
+          .filter(Boolean)
+          .map((l) => JSON.parse(l))
+      : [];
   return { plugin, runs, call: <T>(req: Record<string, unknown>) => invoke<T>(plugin, req) };
 }
 
@@ -85,7 +92,15 @@ test('Docker: containers by Compose project, their ports once, images', { skip: 
   const s = await t.call<Snapshot>({ op: 'snapshot', target: 'docker:desktop-linux' });
   assert.equal(s.error, null);
   const [db, web, lonely] = s.containers!;
-  assert.deepEqual(db, { id: 'aaa111bbb222', name: 'shop-db-1', image: 'postgres:16', state: 'running', status: 'Up 2 hours', ports: ['5432->5432/tcp'], group: 'shop' });
+  assert.deepEqual(db, {
+    id: 'aaa111bbb222',
+    name: 'shop-db-1',
+    image: 'postgres:16',
+    state: 'running',
+    status: 'Up 2 hours',
+    ports: ['5432->5432/tcp'],
+    group: 'shop',
+  });
   assert.equal(web.state, 'exited');
   assert.equal(lonely.state, 'paused', 'from its status, when there’s no State');
   assert.equal(lonely.group, null);
@@ -97,7 +112,10 @@ test('Docker: containers by Compose project, their ports once, images', { skip: 
     ],
   );
   assert.ok(
-    t.runs().filter((r) => r.includes('ps') || r.includes('images')).every((r) => r[1] === '--context' && r[2] === 'desktop-linux'),
+    t
+      .runs()
+      .filter((r) => r.includes('ps') || r.includes('images'))
+      .every((r) => r[1] === '--context' && r[2] === 'desktop-linux'),
     'every command names the context',
   );
   const down = await t.call<Snapshot>({ op: 'snapshot', target: 'docker:default' });
@@ -107,10 +125,24 @@ test('Docker: containers by Compose project, their ports once, images', { skip: 
 test('Podman: its own JSON, pods, and Compose projects', { skip: WIN }, async () => {
   const t = tools(['podman']);
   const s = await t.call<Snapshot>({ op: 'snapshot', target: 'podman' });
-  assert.deepEqual(s.containers![0], { id: '0123456789ab', name: 'api', image: 'quay.io/app/api:1', state: 'running', status: 'Up 4 minutes', ports: ['18080->8080/tcp'], group: 'backend' });
+  assert.deepEqual(s.containers![0], {
+    id: '0123456789ab',
+    name: 'api',
+    image: 'quay.io/app/api:1',
+    state: 'running',
+    status: 'Up 4 minutes',
+    ports: ['18080->8080/tcp'],
+    group: 'backend',
+  });
   assert.equal(s.containers![1].group, 'tools');
   assert.equal(s.containers![1].status, 'exited');
-  assert.deepEqual(s.images![0], { id: 'abcdefabcdef', name: 'quay.io/app/api:1', size: '123 MB', created: new Date(1794000000 * 1000).toISOString().slice(0, 10), containers: 1 });
+  assert.deepEqual(s.images![0], {
+    id: 'abcdefabcdef',
+    name: 'quay.io/app/api:1',
+    size: '123 MB',
+    created: new Date(1794000000 * 1000).toISOString().slice(0, 10),
+    containers: 1,
+  });
   assert.deepEqual(s.pods, [{ id: '999999999999', name: 'backend', status: 'Running', containers: 2 }]);
 });
 
@@ -143,11 +175,17 @@ test('actions: the command lines, and what’s refused', { skip: WIN }, async ()
   assert.ok(runs.includes('kubectl --context kind-dev scale deployment/web --replicas=5 -n web'));
   assert.ok(runs.includes('kubectl --context kind-dev rollout restart deployment/web -n web'));
 
-  await assert.rejects(t.call({ op: 'action', target: 'docker:desktop-linux', action: 'removeImage', id: 'postgres:16' }), /unable to remove repository reference/);
+  await assert.rejects(
+    t.call({ op: 'action', target: 'docker:desktop-linux', action: 'removeImage', id: 'postgres:16' }),
+    /unable to remove repository reference/,
+  );
   await assert.rejects(t.call({ op: 'action', target: 'docker:desktop-linux', action: 'stop', id: '-rf' }), /isn’t a name/);
   await assert.rejects(t.call({ op: 'action', target: 'docker:desktop-linux', action: 'scale', id: 'x' }), /can’t scale/);
   await assert.rejects(t.call({ op: 'action', target: 'kubernetes:kind-dev', action: 'stop', id: 'web' }), /Kubernetes can’t stop/);
-  await assert.rejects(t.call({ op: 'action', target: 'kubernetes:kind-dev', action: 'scale', id: 'web', namespace: 'web', replicas: -1 }), /whole number from 0 to 1000/);
+  await assert.rejects(
+    t.call({ op: 'action', target: 'kubernetes:kind-dev', action: 'scale', id: 'web', namespace: 'web', replicas: -1 }),
+    /whole number from 0 to 1000/,
+  );
   await assert.rejects(t.call({ op: 'action', target: 'kubernetes:kind-dev', action: 'deletePod', id: 'web', namespace: '*' }), /which namespace/);
   await assert.rejects(t.call({ op: 'action', target: 'kubernetes:kind-dev', action: 'deletePod', id: 'web', namespace: 'Bad_NS' }), /isn’t a namespace/);
   await assert.rejects(t.call({ op: 'action', target: 'lxc', action: 'start', id: 'x' }), /isn’t on this server/);
@@ -164,7 +202,13 @@ test('logs follow, both streams, until the window stops watching', { skip: WIN }
   const k = stream<{ text: string }>(t.plugin, { op: 'logs', target: 'kubernetes:kind-dev', id: 'web-7d4-abc', namespace: 'web' });
   assert.match((await k.next()).text, /hello/);
   k.cancel();
-  assert.ok(t.runs().some((r) => r.join(' ') === 'kubectl --context kind-dev logs -f --tail=500 web-7d4-abc -n web --all-containers=true --prefix=true --max-log-requests=10'));
+  assert.ok(
+    t
+      .runs()
+      .some(
+        (r) => r.join(' ') === 'kubectl --context kind-dev logs -f --tail=500 web-7d4-abc -n web --all-containers=true --prefix=true --max-log-requests=10',
+      ),
+  );
 });
 
 test('a shell: what the terminal types', () => {
@@ -172,11 +216,23 @@ test('a shell: what the terminal types', () => {
     throw new Error('not run');
   });
   const docker = new Engine('docker', '/usr/local/bin/docker', runner);
-  const t: Target = { id: 'docker:orbstack', kind: 'docker', name: 'Docker · orbstack', context: 'orbstack', ok: true, error: null, detail: null, namespace: null };
+  const t: Target = {
+    id: 'docker:orbstack',
+    kind: 'docker',
+    name: 'Docker · orbstack',
+    context: 'orbstack',
+    ok: true,
+    error: null,
+    detail: null,
+    namespace: null,
+  };
   assert.equal(docker.shell(t, 'abc123'), 'docker --context orbstack exec -it abc123 sh -c "if command -v bash >/dev/null; then exec bash; else exec sh; fi"');
   const kube = new Kube('kubectl', runner);
   const k: Target = { ...t, id: 'kubernetes:arn:aws:eks:x/y', kind: 'kubernetes', context: 'arn:aws:eks:x/y' };
-  assert.equal(kube.shell(k, 'web-1', 'web', 'sidecar'), 'kubectl --context "arn:aws:eks:x/y" exec -it -n web web-1 -c sidecar -- sh -c "if command -v bash >/dev/null; then exec bash; else exec sh; fi"');
+  assert.equal(
+    kube.shell(k, 'web-1', 'web', 'sidecar'),
+    'kubectl --context "arn:aws:eks:x/y" exec -it -n web web-1 -c sidecar -- sh -c "if command -v bash >/dev/null; then exec bash; else exec sh; fi"',
+  );
 });
 
 test('states and ports as the managers say them', () => {

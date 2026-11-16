@@ -26,7 +26,11 @@ export function volumesList(props: ListProps) {
           Clean up
         </Btn>
       </Toolbar>
-      <Table id="volumes" cols={[{ title: 'Name', w: '45%' }, { title: 'Used by' }, wide && { title: 'Driver', w: '14%' }, { title: '', actions: 1 }]} empty={!list.length}>
+      <Table
+        id="volumes"
+        cols={[{ title: 'Name', w: '45%' }, { title: 'Used by' }, wide && { title: 'Driver', w: '14%' }, { title: '', actions: 1 }]}
+        empty={!list.length}
+      >
         {list.map((v) => (
           <Tr key={v.name} onClick={() => onOpen({ thing: 'volume', id: v.name, name: v.name })}>
             <td className={cn(td, 'font-medium')} title={v.name}>
@@ -40,7 +44,8 @@ export function volumesList(props: ListProps) {
                 icon={Trash2}
                 disabled={is('removeVolume', v.name)}
                 onClick={async () => {
-                  if (await confirm(`Remove the volume ${v.name}?`, 'It goes, with everything in it. A volume a container uses can’t be removed.', 'Remove')) void act('removeVolume', v.name);
+                  if (await confirm(`Remove the volume ${v.name}?`, 'It goes, with everything in it. A volume a container uses can’t be removed.', 'Remove'))
+                    void act('removeVolume', v.name);
                 }}
               />
             </Acts>

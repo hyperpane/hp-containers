@@ -58,8 +58,18 @@ export class Engine {
     contexts.sort((a, b) => Number(b.current) - Number(a.current));
     return Promise.all(
       contexts.map(async ({ name }) => {
-        const t: Target = { ...base, id: name ? `${this.kind}:${name}` : this.kind, name: name ? `${NAMES[this.kind]} · ${name}` : NAMES[this.kind], context: name || null, ok: false };
-        const r = await this.#runner.run(this.tool, this.args(t, ['version', '--format', this.kind === 'podman' ? '{{.Server.Version}}' : '{{json .Server.Version}}']), 8000);
+        const t: Target = {
+          ...base,
+          id: name ? `${this.kind}:${name}` : this.kind,
+          name: name ? `${NAMES[this.kind]} · ${name}` : NAMES[this.kind],
+          context: name || null,
+          ok: false,
+        };
+        const r = await this.#runner.run(
+          this.tool,
+          this.args(t, ['version', '--format', this.kind === 'podman' ? '{{.Server.Version}}' : '{{json .Server.Version}}']),
+          8000,
+        );
         const version = r.stdout.trim().replace(/^"|"$/g, '');
         if (r.code === 0 && version && version !== 'null') return { ...t, ok: true, detail: `${NAMES[this.kind]} ${version}` };
         return { ...t, error: engineError(this.kind, said(r)) };
@@ -77,7 +87,7 @@ export class Engine {
       this.kind === 'podman' ? this.#runner.run(this.tool, ['pod', 'ps', '--format', 'json']) : null,
     ]);
     const parse = <T>(r: { code: number | null; stdout: string } | null, f: (r: Record<string, unknown>) => T): T[] => {
-      if (!r || r.code !== 0) return [];
+      if (r?.code !== 0) return [];
       try {
         return (jsonLines(r.stdout) as Record<string, unknown>[]).map(f);
       } catch {
@@ -101,7 +111,16 @@ export class Engine {
       }),
       networks: parse(networks, networkOf),
     };
-    if (pods) out.pods = parse(pods, (r): PodmanPod => ({ id: str(r.Id).slice(0, 12), name: str(r.Name), status: str(r.Status), containers: Array.isArray(r.Containers) ? r.Containers.length : 0 }));
+    if (pods)
+      out.pods = parse(
+        pods,
+        (r): PodmanPod => ({
+          id: str(r.Id).slice(0, 12),
+          name: str(r.Name),
+          status: str(r.Status),
+          containers: Array.isArray(r.Containers) ? r.Containers.length : 0,
+        }),
+      );
     return out;
   }
 
@@ -155,9 +174,13 @@ export class Engine {
       const bytes = r.size ?? r.Size;
       const created = pick(r, 'CreatedSince', 'created', 'CreatedAt');
       return {
-        id: str(pick(r, 'ID', 'id')).replace(/^sha256:/, '').slice(0, 12),
+        id: str(pick(r, 'ID', 'id'))
+          .replace(/^sha256:/, '')
+          .slice(0, 12),
         created: typeof created === 'string' && /^\d{4}-/.test(created) ? created.slice(0, 10) : str(created),
-        createdBy: str(pick(r, 'CreatedBy', 'createdBy')).replace(/^\/bin\/sh -c #\(nop\)\s*/, '').trim(),
+        createdBy: str(pick(r, 'CreatedBy', 'createdBy'))
+          .replace(/^\/bin\/sh -c #\(nop\)\s*/, '')
+          .trim(),
         size: typeof bytes === 'number' ? size(bytes) : str(bytes),
         comment: str(pick(r, 'Comment', 'comment')),
       };
@@ -196,7 +219,13 @@ export class Engine {
   async prune(t: Target, what: Prune): Promise<string> {
     const r = await this.#runner.run(this.tool, this.pruneArgs(t, what), 300_000);
     if (r.code !== 0) throw new Error(engineError(this.kind, said(r)));
-    return r.stdout.trim().split('\n').filter((l) => /reclaimed/i.test(l)).at(-1) ?? 'Done.';
+    return (
+      r.stdout
+        .trim()
+        .split('\n')
+        .filter((l) => /reclaimed/i.test(l))
+        .at(-1) ?? 'Done.'
+    );
   }
 
   /** Starts a container from an image: its id. */

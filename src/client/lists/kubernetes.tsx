@@ -17,11 +17,22 @@ export function kubePodsList(props: ListProps) {
       <Toolbar title="Pods" filter={filter} setFilter={setFilter} />
       <Table
         id="pods"
-        cols={[{ title: 'Name', w: '34%' }, { title: 'Status' }, { title: 'Ready', w: '9%' }, wide && { title: 'Restarts', w: '10%' }, wide && { title: 'Age', w: '12%' }, wide && { title: 'Node', w: '14%' }, { title: '', actions: 2 }]}
+        cols={[
+          { title: 'Name', w: '34%' },
+          { title: 'Status' },
+          { title: 'Ready', w: '9%' },
+          wide && { title: 'Restarts', w: '10%' },
+          wide && { title: 'Age', w: '12%' },
+          wide && { title: 'Node', w: '14%' },
+          { title: '', actions: 2 },
+        ]}
         empty={!list.length}
       >
         {list.map((p) => (
-          <Tr key={`${p.namespace}/${p.name}`} onClick={() => onOpen({ thing: 'kubePod', id: p.name, name: p.name, namespace: p.namespace, containers: p.containers })}>
+          <Tr
+            key={`${p.namespace}/${p.name}`}
+            onClick={() => onOpen({ thing: 'kubePod', id: p.name, name: p.name, namespace: p.namespace, containers: p.containers })}
+          >
             <td className={td}>
               <div className="flex items-center gap-2">
                 <span className={cn('size-2 flex-none rounded-full', kubeDot(p.phase))} />
@@ -37,13 +48,19 @@ export function kubePodsList(props: ListProps) {
             {wide && <td className={cn(td, 'text-[var(--node-muted)]')}>{p.created ? formatAgo(p.created) : ''}</td>}
             {wide && <td className={cn(td, 'text-[var(--node-muted)]')}>{p.node}</td>}
             <Acts>
-              <ToolButton label="Shell (in a terminal)" icon={SquareTerminal} disabled={p.phase !== 'Running'} onClick={() => shell(p.name, { namespace: p.namespace })} />
+              <ToolButton
+                label="Shell (in a terminal)"
+                icon={SquareTerminal}
+                disabled={p.phase !== 'Running'}
+                onClick={() => shell(p.name, { namespace: p.namespace })}
+              />
               <ToolButton
                 label="Delete"
                 icon={Trash2}
                 disabled={is('deletePod', p.name)}
                 onClick={async () => {
-                  if (await confirm(`Delete ${p.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone', 'Delete')) void act('deletePod', p.name, { namespace: p.namespace });
+                  if (await confirm(`Delete ${p.name}?`, 'A pod a deployment owns comes back as a new one; one on its own is gone', 'Delete'))
+                    void act('deletePod', p.name, { namespace: p.namespace });
                 }}
               />
             </Acts>
@@ -60,7 +77,11 @@ export function deploymentsList(props: ListProps) {
   return (
     <>
       <Toolbar title="Deployments" filter={filter} setFilter={setFilter} />
-      <Table id="deployments" cols={[{ title: 'Name', w: '50%' }, { title: 'Ready' }, wide && { title: 'Age' }, { title: '', actions: 2 }]} empty={!list.length}>
+      <Table
+        id="deployments"
+        cols={[{ title: 'Name', w: '50%' }, { title: 'Ready' }, wide && { title: 'Age' }, { title: '', actions: 2 }]}
+        empty={!list.length}
+      >
         {list.map((d) => {
           const [ready, want] = d.ready.split('/').map(Number);
           return (
@@ -85,7 +106,12 @@ export function deploymentsList(props: ListProps) {
                     if (n !== null && n.trim() !== '') void act('scale', d.name, { namespace: d.namespace, replicas: Number(n) });
                   }}
                 />
-                <ToolButton label="Restart (a rollout)" icon={RotateCw} disabled={is('rolloutRestart', d.name)} onClick={() => void act('rolloutRestart', d.name, { namespace: d.namespace })} />
+                <ToolButton
+                  label="Restart (a rollout)"
+                  icon={RotateCw}
+                  disabled={is('rolloutRestart', d.name)}
+                  onClick={() => void act('rolloutRestart', d.name, { namespace: d.namespace })}
+                />
               </Acts>
             </Tr>
           );
@@ -101,7 +127,11 @@ export function servicesList(props: ListProps) {
   return (
     <>
       <Toolbar title="Services" filter={filter} setFilter={setFilter} />
-      <Table id="services" cols={[{ title: 'Name', w: '30%' }, { title: 'Type' }, wide && { title: 'Cluster IP' }, { title: 'Ports' }, wide && { title: 'Age' }]} empty={!list.length}>
+      <Table
+        id="services"
+        cols={[{ title: 'Name', w: '30%' }, { title: 'Type' }, wide && { title: 'Cluster IP' }, { title: 'Ports' }, wide && { title: 'Age' }]}
+        empty={!list.length}
+      >
         {list.map((s) => (
           <Tr key={`${s.namespace}/${s.name}`} onClick={() => onOpen({ thing: 'service', id: s.name, name: s.name, namespace: s.namespace })}>
             <td className={cn(td, 'font-medium')}>

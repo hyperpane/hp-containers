@@ -8,7 +8,7 @@ import { ID } from '../lib/calls.ts';
 import { Loading } from '../ui/controls.tsx';
 
 /** A line chart of the last readings, 0 to `max` (or the highest). */
-export function Spark({ values, max, color }: { values: number[]; max?: number; color: string }) {
+function Spark({ values, max, color }: { values: number[]; max?: number; color: string }) {
   const w = 240;
   const h = 48;
   const top = Math.max(max ?? 0, ...values, 1);
@@ -31,7 +31,9 @@ export function StatsView({ target, id }: { target: string; id: string }) {
   const [ended, setEnded] = useState<string | null>(null);
   useEffect(() => {
     setSamples([]);
-    return host.subscribe<{ stats: Stats }>(ID, { op: 'stats', target, id }, (e) => setSamples((s) => [...s, e.stats].slice(-60)), { onEnd: (e) => setEnded(e ?? null) });
+    return host.subscribe<{ stats: Stats }>(ID, { op: 'stats', target, id }, (e) => setSamples((s) => [...s, e.stats].slice(-60)), {
+      onEnd: (e) => setEnded(e ?? null),
+    });
   }, [host, target, id]);
   const last = samples.at(-1);
   if (!last) return <Loading error={ended ?? undefined}>Reading its use… (only while it runs)</Loading>;

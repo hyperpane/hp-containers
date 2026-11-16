@@ -6,8 +6,9 @@ import type { Action, Deployment, FileContent, FileEntry, KubePod, Service, Snap
 import { LIST_SCRIPT, MAX_TEXT, checkedPath, contentOf, entriesOf } from './files.ts';
 import { type Runner, said } from '../tools.ts';
 
-export function kubeError(text: string): string {
-  if (/unable to connect to the server|connection refused|no such host|i\/o timeout|context deadline exceeded/i.test(text)) return `The cluster doesn’t answer (${text.replace(/^.*?:\s*/, '').slice(0, 160)}).`;
+function kubeError(text: string): string {
+  if (/unable to connect to the server|connection refused|no such host|i\/o timeout|context deadline exceeded/i.test(text))
+    return `The cluster doesn’t answer (${text.replace(/^.*?:\s*/, '').slice(0, 160)}).`;
   if (/forbidden/i.test(text)) return `Not allowed: ${text}`;
   if (/you must be logged in|unauthorized/i.test(text)) return 'kubectl isn’t signed in to this cluster.';
   return text;
@@ -20,7 +21,7 @@ const time = (v: unknown) => {
 
 type Obj = Record<string, any>;
 
-export function podOf(p: Obj): KubePod {
+function podOf(p: Obj): KubePod {
   const statuses: Obj[] = p.status?.containerStatuses ?? [];
   const containers: string[] = (p.spec?.containers ?? []).map((c: Obj) => String(c.name));
   const waiting = statuses.map((s) => s.state?.waiting?.reason ?? s.state?.terminated?.reason).find((r) => r && r !== 'Completed');
@@ -36,7 +37,7 @@ export function podOf(p: Obj): KubePod {
   };
 }
 
-export function deploymentOf(d: Obj): Deployment {
+function deploymentOf(d: Obj): Deployment {
   const replicas = Number(d.spec?.replicas ?? 0);
   return {
     name: String(d.metadata?.name ?? ''),
@@ -47,7 +48,7 @@ export function deploymentOf(d: Obj): Deployment {
   };
 }
 
-export function serviceOf(s: Obj): Service {
+function serviceOf(s: Obj): Service {
   return {
     name: String(s.metadata?.name ?? ''),
     namespace: String(s.metadata?.namespace ?? ''),
@@ -97,7 +98,16 @@ export class Kube {
     return Promise.all(
       names.map(async (name): Promise<Target> => {
         const ns = (config.contexts as Obj[] | undefined)?.find((c) => c.name === name)?.context?.namespace ?? 'default';
-        const t: Target = { id: `kubernetes:${name}`, kind: 'kubernetes', name: `Kubernetes · ${name}`, context: name, ok: false, error: null, detail: null, namespace: ns };
+        const t: Target = {
+          id: `kubernetes:${name}`,
+          kind: 'kubernetes',
+          name: `Kubernetes · ${name}`,
+          context: name,
+          ok: false,
+          error: null,
+          detail: null,
+          namespace: ns,
+        };
         const r = await this.#runner.run(this.tool, this.#args(t, ['version', '-o', 'json', '--request-timeout=5s']), 10_000);
         try {
           const v = JSON.parse(r.stdout) as Obj;

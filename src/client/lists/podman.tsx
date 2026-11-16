@@ -13,7 +13,11 @@ export function podsList(props: ListProps) {
   return (
     <>
       <Toolbar title="Pods" filter={filter} setFilter={setFilter} />
-      <Table id="podman" cols={[{ title: 'Name', w: '40%' }, { title: 'Status' }, { title: 'Containers', w: '16%' }, { title: '', actions: 2 }]} empty={!list.length}>
+      <Table
+        id="podman"
+        cols={[{ title: 'Name', w: '40%' }, { title: 'Status' }, { title: 'Containers', w: '16%' }, { title: '', actions: 2 }]}
+        empty={!list.length}
+      >
         {list.map((p) => {
           const on = /running/i.test(p.status);
           return (

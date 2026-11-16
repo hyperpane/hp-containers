@@ -4,7 +4,12 @@
 import { NodeButton } from '@hyperpane/ui';
 
 /** A small button with an icon and words, for a page's header. */
-export function Btn({ icon: Icon, children, danger, ...props }: React.ComponentProps<'button'> & { icon: React.ComponentType<{ className?: string }>; danger?: boolean }) {
+export function Btn({
+  icon: Icon,
+  children,
+  danger,
+  ...props
+}: React.ComponentProps<'button'> & { icon: React.ComponentType<{ className?: string }>; danger?: boolean }) {
   return (
     <NodeButton {...props} variant={danger ? 'danger' : 'default'}>
       <Icon />

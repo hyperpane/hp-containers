@@ -24,7 +24,8 @@ export function SimplePage(props: DetailProps) {
           icon={Trash2}
           disabled={busy}
           onClick={async () => {
-            if (await confirm(`Remove ${open.name}?`, open.thing === 'volume' ? 'It goes, with everything in it' : 'It goes', 'Remove')) void act(remove, {}, true);
+            if (await confirm(`Remove ${open.name}?`, open.thing === 'volume' ? 'It goes, with everything in it' : 'It goes', 'Remove'))
+              void act(remove, {}, true);
           }}
         />,
       )}

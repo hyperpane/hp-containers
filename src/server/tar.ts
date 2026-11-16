@@ -12,7 +12,10 @@ export interface TarHeader {
   link: string;
 }
 
-const text = (b: Uint8Array, at: number, len: number) => Buffer.from(b.subarray(at, at + len)).toString('utf8').replace(/\0.*$/s, '');
+const text = (b: Uint8Array, at: number, len: number) =>
+  Buffer.from(b.subarray(at, at + len))
+    .toString('utf8')
+    .replace(/\0.*$/s, '');
 const octal = (b: Uint8Array, at: number, len: number) => {
   // Big sizes are base-256 (first byte 0x80).
   if (b[at] & 0x80) {

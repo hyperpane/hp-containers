@@ -28,7 +28,14 @@ function tools(only: string[]) {
   }
   const host = testHost({ id: 'containers', projects: [{ id: 'p1', name: 'app', folder: project }] });
   const plugin = make({ which: (n) => (only.includes(n) ? path.join(dir, n) : null), pollEvery: 50 })(host);
-  const runs = (): string[] => (existsSync(log) ? readFileSync(log, 'utf8').trim().split('\n').filter(Boolean).map((l) => (JSON.parse(l) as string[]).join(' ')) : []);
+  const runs = (): string[] =>
+    existsSync(log)
+      ? readFileSync(log, 'utf8')
+          .trim()
+          .split('\n')
+          .filter(Boolean)
+          .map((l) => (JSON.parse(l) as string[]).join(' '))
+      : [];
   return { plugin, project, runs, call: <T>(req: Record<string, unknown>) => invoke<T>(plugin, req) };
 }
 
@@ -86,8 +93,37 @@ test('Docker: Compose projects, volumes and networks are acted on by name', { sk
 
 test('running an image: its arguments, each part checked', { skip }, async () => {
   assert.deepEqual(
-    runArgs({ image: 'nginx:1.27', name: 'web', ports: ['8080:80', '127.0.0.1:53:53/udp'], env: ['A=1', 'B=two words'], volumes: ['data:/usr/share/nginx/html:ro'], restart: 'unless-stopped', command: ['nginx', '-g', 'daemon off;'] }),
-    ['run', '-d', '--name', 'web', '-p', '8080:80', '-p', '127.0.0.1:53:53/udp', '-e', 'A=1', '-e', 'B=two words', '-v', 'data:/usr/share/nginx/html:ro', '--restart', 'unless-stopped', 'nginx:1.27', 'nginx', '-g', 'daemon off;'],
+    runArgs({
+      image: 'nginx:1.27',
+      name: 'web',
+      ports: ['8080:80', '127.0.0.1:53:53/udp'],
+      env: ['A=1', 'B=two words'],
+      volumes: ['data:/usr/share/nginx/html:ro'],
+      restart: 'unless-stopped',
+      command: ['nginx', '-g', 'daemon off;'],
+    }),
+    [
+      'run',
+      '-d',
+      '--name',
+      'web',
+      '-p',
+      '8080:80',
+      '-p',
+      '127.0.0.1:53:53/udp',
+      '-e',
+      'A=1',
+      '-e',
+      'B=two words',
+      '-v',
+      'data:/usr/share/nginx/html:ro',
+      '--restart',
+      'unless-stopped',
+      'nginx:1.27',
+      'nginx',
+      '-g',
+      'daemon off;',
+    ],
   );
   assert.throws(() => runArgs({ image: '--privileged' }), /which image/);
   assert.throws(() => runArgs({ image: 'nginx', ports: ['80:80 --privileged'] }), /isn’t a port mapping/);
@@ -150,7 +186,18 @@ test('pm2: its processes (past its banner), actions and logs', { skip }, async (
   const [target] = (await t.call<Target[]>({ op: 'targets' })).filter((x) => x.installed !== false);
   assert.deepEqual([target.id, target.ok, target.detail], ['pm2', true, 'pm2 5.4.2']);
   const s = await t.call<Snapshot>({ op: 'snapshot', target: 'pm2' });
-  assert.deepEqual(s.processes![0], { id: '0', name: 'api', status: 'online', pid: 4242, cpu: 3, memory: 52428800, restarts: 2, since: 1794500000000, cwd: '/srv/api', mode: 'cluster × 4' });
+  assert.deepEqual(s.processes![0], {
+    id: '0',
+    name: 'api',
+    status: 'online',
+    pid: 4242,
+    cpu: 3,
+    memory: 52428800,
+    restarts: 2,
+    since: 1794500000000,
+    cwd: '/srv/api',
+    mode: 'cluster × 4',
+  });
   assert.equal(s.processes![1].status, 'errored');
   assert.equal(s.processes![1].since, null);
   await t.call({ op: 'action', target: 'pm2', action: 'pm2Reload', id: '0' });
@@ -189,8 +236,18 @@ test('Kubernetes: services, describe, and files in a pod', { skip }, async () =>
   const t = tools(['kubectl']);
   const s = await t.call<Snapshot>({ op: 'snapshot', target: 'kubernetes:kind-dev' });
   assert.deepEqual(s.services![0], { name: 'web', namespace: 'web', type: 'NodePort', clusterIP: '10.96.0.12', ports: ['80:30080/TCP'], created: null });
-  assert.match(await t.call<string>({ op: 'describe', target: 'kubernetes:kind-dev', thing: 'kubePod', id: 'web-7d4-abc', namespace: 'web' }), /Back-off restarting/);
-  const files = await t.call<FileEntry[]>({ op: 'files', target: 'kubernetes:kind-dev', id: 'web-7d4-abc', namespace: 'web', container: 'web', path: '/etc/app' });
+  assert.match(
+    await t.call<string>({ op: 'describe', target: 'kubernetes:kind-dev', thing: 'kubePod', id: 'web-7d4-abc', namespace: 'web' }),
+    /Back-off restarting/,
+  );
+  const files = await t.call<FileEntry[]>({
+    op: 'files',
+    target: 'kubernetes:kind-dev',
+    id: 'web-7d4-abc',
+    namespace: 'web',
+    container: 'web',
+    path: '/etc/app',
+  });
   assert.equal(files[0].name, 'app.conf');
   assert.ok(t.runs().some((r) => r.startsWith('kubectl --context kind-dev exec web-7d4-abc -n web -c web -- sh -c')));
   const f = await t.call<FileContent>({ op: 'readFile', target: 'kubernetes:kind-dev', id: 'web-7d4-abc', namespace: 'web', path: '/etc/app/app.conf' });

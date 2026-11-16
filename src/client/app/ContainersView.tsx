@@ -39,7 +39,9 @@ export function ContainersView() {
     host.call<Target[]>(ID, { op: 'targets' }).then(
       (list) => {
         setTargets(list);
-        setTargetId((id) => (id && list.some((t) => t.id === id) ? id : ((list.find((t) => t.ok) ?? list.find((t) => t.installed !== false) ?? list[0])?.id ?? null)));
+        setTargetId((id) =>
+          id && list.some((t) => t.id === id) ? id : ((list.find((t) => t.ok) ?? list.find((t) => t.installed !== false) ?? list[0])?.id ?? null),
+        );
         setTick((t) => t + 1);
       },
       (e: Error) => setError(e.message),
@@ -89,7 +91,10 @@ export function ContainersView() {
             size="sm"
             className="w-full"
             value={ns!}
-            options={[{ value: '*', label: 'All namespaces' }, ...[...new Set([...(snap.namespaces ?? []), ns!])].filter((n) => n !== '*').map((n) => ({ value: n, label: n }))]}
+            options={[
+              { value: '*', label: 'All namespaces' },
+              ...[...new Set([...(snap.namespaces ?? []), ns!])].filter((n) => n !== '*').map((n) => ({ value: n, label: n })),
+            ]}
             onValueChange={(n) => {
               setNamespace(n);
               setOpen(null);
@@ -110,7 +115,11 @@ export function ContainersView() {
                 }}
                 className={cn(
                   'rounded-control flex h-7 items-center gap-2 px-2 text-left transition-colors duration-100',
-                  section === s && !open ? 'bg-[color-mix(in_srgb,var(--node-accent)_22%,transparent)]' : section === s ? 'bg-[var(--node-hover)]' : 'text-[var(--node-muted)] hover:bg-[var(--node-hover)] hover:text-[var(--node-fg)]',
+                  section === s && !open
+                    ? 'bg-[color-mix(in_srgb,var(--node-accent)_22%,transparent)]'
+                    : section === s
+                      ? 'bg-[var(--node-hover)]'
+                      : 'text-[var(--node-muted)] hover:bg-[var(--node-hover)] hover:text-[var(--node-fg)]',
                 )}
               >
                 <Icon className="size-3.5 flex-none" />

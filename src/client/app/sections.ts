@@ -30,7 +30,7 @@ export function sectionsFor(kind: Kind | undefined, snap: Snapshot | null): Sect
 
 export const count = (s: Section, snap: Snapshot | null): number | undefined =>
   (
-    {
+    ({
       containers: snap?.containers,
       images: snap?.images,
       volumes: snap?.volumes,
@@ -41,6 +41,5 @@ export const count = (s: Section, snap: Snapshot | null): number | undefined =>
       services: snap?.services,
       processes: snap?.processes,
       sessions: snap?.sessions,
-    } as Partial<Record<Section, unknown[]>>
+    }) as Partial<Record<Section, unknown[]>>
   )[s]?.length;
-

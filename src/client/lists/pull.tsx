@@ -41,9 +41,14 @@ function PullLog({ target, image }: { target: string; image: string }) {
   const [done, setDone] = useState<string | null>(null);
   useEffect(
     () =>
-      host.subscribe<{ text: string }>(ID, { op: 'pull', target, image }, (e) => setLines((l) => [...l, ...e.text.split(/\r?\n|\r/).filter(Boolean)].slice(-200)), {
-        onEnd: (e) => setDone(e ?? 'Done.'),
-      }),
+      host.subscribe<{ text: string }>(
+        ID,
+        { op: 'pull', target, image },
+        (e) => setLines((l) => [...l, ...e.text.split(/\r?\n|\r/).filter(Boolean)].slice(-200)),
+        {
+          onEnd: (e) => setDone(e ?? 'Done.'),
+        },
+      ),
     [host, target, image],
   );
   return (
